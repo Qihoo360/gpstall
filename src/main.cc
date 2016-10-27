@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
 
   ParseArgs(argc, argv, options);
 
-  options.Dump();
+  //options.Dump();
   GlogInit(options);
   PSSignalSetup();
 
@@ -67,7 +67,9 @@ int main(int argc, char** argv) {
 
 void Usage() {
   printf ("Usage:\n"
-          "  ./psstall --local_ip local_ip --local_port local_port --data_path path --log_path path\n");
+          "  ./pgstall --local_ip local_ip --local_port local_port --worker_num 8 --data_path path --log_path path"
+          " --file_size 40000000\n"
+          "   these Options are optional.\n");
 }
 
 void ParseArgs(int argc, char* argv[], PSOptions& options) {
@@ -79,12 +81,14 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
   const struct option long_options[] = {
     {"local_ip", required_argument, NULL, 'n'},
     {"local_port", required_argument, NULL, 'p'},
+    {"worker_num", required_argument, NULL, 'w'},
+    {"file_size", required_argument, NULL, 'f'},
     {"data_path", required_argument, NULL, 'd'},
     {"log_path", required_argument, NULL, 'l'},
     {"help", no_argument, NULL, 'h'},
     {NULL, 0, NULL, 0}, };
 
-  const char* short_options = "n:p:d:l:h";
+  const char* short_options = "n:p:w:f:d:l:h";
 
   int ch, longindex;
   while ((ch = getopt_long(argc, argv, short_options, long_options,
@@ -95,6 +99,12 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
         break;
       case 'p':
         options.local_port = atoi(optarg);
+        break;
+      case 'w':
+        options.worker_num = atoi(optarg);
+        break;
+      case 'f':
+        options.file_size = atoi(optarg);
         break;
       case 'd':
         options.data_path = optarg;

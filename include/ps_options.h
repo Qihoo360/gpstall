@@ -33,6 +33,9 @@ struct PSOptions {
   std::string local_ip;
   int local_port;
 
+  int worker_num;
+  int file_size;
+
   // TODO session timeout
   int64_t timeout;
 

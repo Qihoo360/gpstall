@@ -17,7 +17,7 @@ CXX = g++
 
 ifeq ($(__REL), 1)
 #CXXFLAGS = -Wall -W -DDEBUG -g -O0 -D__XDEBUG__ -fPIC -Wno-unused-function -std=c++11
-	CXXFLAGS = -O2 -g -pipe -fPIC -W -DNDEBUG -Wwrite-strings -Wpointer-arith -Wreorder -Wswitch -Wsign-promo -Wredundant-decls -Wformat -Wall -Wno-unused-parameter -D_GNU_SOURCE -D__STDC_FORMAT_MACROS -std=c++11 -gdwarf-2 -Wno-redundant-decls
+	CXXFLAGS = -O0 -g -pipe -fPIC -W -DNDEBUG -Wwrite-strings -Wpointer-arith -Wreorder -Wswitch -Wsign-promo -Wredundant-decls -Wformat -Wall -Wno-unused-parameter -D_GNU_SOURCE -D__STDC_FORMAT_MACROS -std=c++11 -gdwarf-2 -Wno-redundant-decls
 else
 	CXXFLAGS = -O0 -g -gstabs+ -pg -pipe -fPIC -W -D__XDEBUG__ -DDEBUG -Wwrite-strings -Wpointer-arith -Wreorder -Wswitch -Wsign-promo -Wredundant-decls -Wformat -Wall -Wno-unused-parameter -D_GNU_SOURCE -D__STDC_FORMAT_MACROS -std=c++11 -Wno-redundant-decls
 endif
@@ -48,7 +48,6 @@ LIB_PATH = -L./ \
 
 
 LIBS = -lpthread \
-	   -lprotobuf \
 	   -lglog \
 	   -lslash \
 		 -lpink
@@ -67,7 +66,7 @@ all: $(BIN)
 	mkdir $(OUTPUT)/bin
 	#cp -r ./conf $(OUTPUT)/
 	mkdir $(OUTPUT)/lib
-	#cp -r $(SO_PATH)/*  $(OUTPUT)/lib
+	cp -r $(SO_PATH)/*  $(OUTPUT)/lib
 	mv $(BIN) $(OUTPUT)/bin/
 	#mkdir $(OUTPUT)/tools
 	@echo "Success, go, go, go..."

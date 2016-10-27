@@ -22,10 +22,20 @@ PSClientConn::~PSClientConn() {
 int PSClientConn::DealMessage() {
   self_thread_->PlusThreadQuerynum();
 
-  printf ("DealMessage statement: (%s) len=%d\n", statement_.c_str(), statement_.size());
+  DLOG(INFO) << "DealMessage statement=(" << statement_ << ") dbname=("
+      << dbname_ << ") table=(" << parser_.table_ << ") rows: size="
+      << parser_.rows_.size() << std::endl;
 
+  {
+    slash::MutexLock l(&(ps_server->mutex_files_));
+    Logger* log = ps_server->GetLogger(dbname_, parser_.table_);
+    for (size_t i = 0; i < parser_.rows_.size(); i++) {
+      log->Put(parser_.rows_[i] + "\n");
+    }
+  }
+
+  // we simple return ok
   set_is_reply(true);
-  //std::string raw_msg(rbuf_ + cur_pos_ - header_len_ - 4, header_len_ + 4);
 
   return 0;
 }

@@ -9,6 +9,7 @@
 
 #include "ps_options.h"
 #include "ps_consts.h"
+#include "ps_logger.h"
 
 #include "bg_thread.h"
 #include "holy_thread.h"
@@ -43,6 +44,10 @@ class PSServer {
     should_exit_ = true;
   }
 
+  Logger* GetLogger(const std::string &database, const std::string &table);
+
+  slash::Mutex mutex_files_;
+
  private:
 
   PSOptions options_;
@@ -53,6 +58,9 @@ class PSServer {
   PSDispatchThread* ps_dispatch_thread_;
 
   std::atomic<bool> should_exit_;
+
+  // logger related
+  std::unordered_map<std::string, Logger*> files_;
 
   // Background thread
 };
