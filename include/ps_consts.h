@@ -10,6 +10,7 @@ const int kDispatchCronInterval = 1000;
 
 // FileSize = QPS * single_record_size * time
 const int kFileSize = 10000 * 32 * 2 * 60;
+const int kLoadCronInterval = 60; // seconds
 
 //const std::string kLoggerPrefix = "csv";
 const std::string kLoggerSuffix = ".csv";

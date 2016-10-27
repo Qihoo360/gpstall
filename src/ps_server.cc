@@ -45,8 +45,13 @@ Status PSServer::Start() {
   LOG(INFO) << "PSServer started on port:" <<  options_.local_port;
 
   while (!should_exit_) {
-    //DoTimingTask();
-    sleep(3);
+    DoTimingTask();
+    
+    int try_num = 0;
+    while (!should_exit_ && try_num++ < kLoadCronInterval) {
+      //DLOG(INFO) << "should_exit_ " << should_exit_;
+      sleep(1);
+    }
   }
   return Status::OK();
 }
@@ -65,5 +70,8 @@ Logger* PSServer::GetLogger(const std::string &database, const std::string &tabl
   }
 }
 
-//void PSServer::DoTimingTask() {
-//}
+void PSServer::DoTimingTask() {
+  std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script;
+  DLOG(INFO) << "Cron Load: " << cmd;
+  system(cmd.c_str());
+}

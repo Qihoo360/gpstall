@@ -41,6 +41,8 @@ struct PSOptions {
 
   std::string data_path;
   std::string log_path;
+  std::string load_script;
+  std::string conf_script;
 
   //std::vector<Server> servers;
 

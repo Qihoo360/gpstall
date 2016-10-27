@@ -41,6 +41,7 @@ class PSServer {
   }
 
   void Exit() {
+    //printf ("Server will exit!\n");
     should_exit_ = true;
   }
 
@@ -62,6 +63,7 @@ class PSServer {
   // logger related
   std::unordered_map<std::string, Logger*> files_;
 
+  void DoTimingTask();
   // Background thread
 };
 
