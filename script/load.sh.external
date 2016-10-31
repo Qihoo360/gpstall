@@ -1,0 +1,37 @@
+#!/bin/bash
+DIR=${1:-./data}
+ORI_CONF=${2:-./gpload.yaml.ori.external}
+TMP_CONF=${3:-./gpload.yaml.tmp}
+
+echo "================================"
+echo "  data_path   :  $DIR"
+echo "  gpload.yaml :  $ORI_CONF"
+echo "--------------------------------"
+echo ""
+
+for database in `ls $DIR` ; do
+  #echo "Database: $database"
+  for table in `ls $DIR"/"$database` ; do
+    echo "================================"
+    echo "Database: $database table=$table"
+    echo "--------------------------------"
+    data_path=$DIR/$database/$file/$table/
+    pattern=$data_path"*csv"
+
+    cp $ORI_CONF $TMP_CONF
+    sed -i "s|{DATABASE}|${database}|g" $TMP_CONF
+    sed -i "s|{TABLE}|${table}|g" $TMP_CONF
+    sed -i "s|{FILE}|${pattern}|g" $TMP_CONF
+
+    gpload -f $TMP_CONF
+    for file in `find $data_path -name "*csv"` ; do
+      echo " -  - " $file
+      mv $file $file.used
+    done
+
+    #rm -f $TMP_CONF 
+    echo ""
+  done
+done
+
+#gpload -f gpload1.yaml

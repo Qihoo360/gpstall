@@ -1,0 +1,28 @@
+---
+VERSION: 1.0.0.1
+# describe the Greenplum database parameters
+DATABASE: {DATABASE}
+USER: test
+HOST: xxx.xx.xx.x
+PORT: xxx
+# describe the location of the source files
+# in this example, the database master lives on the same host as the source files
+GPLOAD:
+   INPUT:
+    - SOURCE:
+         LOCAL_HOSTNAME:
+           - x.x.x.x
+         PORT: xxxx
+         FILE: 
+          - {FILE}
+    - FORMAT: csv
+    - QUOTE: '"'
+    - HEADER: true
+    - ERROR_LIMIT: 50000
+   EXTERNAL:
+    - SCHEMA: '%'
+   OUTPUT:
+    - TABLE: {TABLE}
+    - MODE: INSERT
+   PRELOAD:
+    - TRUNCATE: true

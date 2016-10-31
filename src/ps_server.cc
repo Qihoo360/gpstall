@@ -45,13 +45,12 @@ Status PSServer::Start() {
   LOG(INFO) << "PSServer started on port:" <<  options_.local_port;
 
   while (!should_exit_) {
-    DoTimingTask();
-    
     int try_num = 0;
     while (!should_exit_ && try_num++ < kLoadCronInterval) {
       //DLOG(INFO) << "should_exit_ " << should_exit_;
       sleep(1);
     }
+    DoTimingTask();
   }
   return Status::OK();
 }

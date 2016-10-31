@@ -35,6 +35,7 @@ struct PSOptions {
 
   int worker_num;
   int file_size;
+  int load_interval;
 
   // TODO session timeout
   int64_t timeout;

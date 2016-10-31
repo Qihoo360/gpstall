@@ -11,6 +11,7 @@ PSOptions::PSOptions()
     local_port(8001),
     worker_num(8),
     file_size(kFileSize),
+    load_interval(kLoadCronInterval),
     data_path("./data"),
     log_path("./log") {
   if (data_path.back() != '/') {
@@ -43,6 +44,7 @@ PSOptions::PSOptions(const PSOptions& options)
     local_port(options.local_port),
     worker_num(options.worker_num),
     file_size(options.file_size),
+    load_interval(options.load_interval),
     data_path(options.data_path),
     log_path(options.log_path),
     load_script(options.load_script),
@@ -73,13 +75,14 @@ void PSOptions::Dump() {
   char cwd[1024];
   getcwd(cwd, sizeof(cwd));
 
-  LOG(INFO) << "    Current directory   : " << cwd;
-  LOG(INFO) << "    Options.local_ip    : " << local_ip;
-  LOG(INFO) << "    Options.local_port  : " << local_port;
-  LOG(INFO) << "    Options.data_path   : " << data_path;
-  LOG(INFO) << "    Options.log_path    : " << log_path;
-  LOG(INFO) << "    Options.worker_num  : " << worker_num;
-  LOG(INFO) << "    Options.file_size   : " << file_size << " Bytes";
-  LOG(INFO) << "    Options.load_script : " << load_script;
-  LOG(INFO) << "    Options.conf_script : " << conf_script;
+  LOG(INFO) << "    Current directory     : " << cwd;
+  LOG(INFO) << "    Options.local_ip      : " << local_ip;
+  LOG(INFO) << "    Options.local_port    : " << local_port;
+  LOG(INFO) << "    Options.data_path     : " << data_path;
+  LOG(INFO) << "    Options.log_path      : " << log_path;
+  LOG(INFO) << "    Options.worker_num    : " << worker_num;
+  LOG(INFO) << "    Options.file_size     : " << file_size << " Bytes";
+  LOG(INFO) << "    Options.load_interval : " << load_interval << " Seconds";
+  LOG(INFO) << "    Options.load_script   : " << load_script;
+  LOG(INFO) << "    Options.conf_script   : " << conf_script;
 }
