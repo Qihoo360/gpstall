@@ -46,22 +46,24 @@ Status PSServer::Start() {
 
   while (!should_exit_) {
     int try_num = 0;
-    while (!should_exit_ && try_num++ < kLoadCronInterval) {
+    while (!should_exit_ && try_num++ < options_.load_interval) {
       //DLOG(INFO) << "should_exit_ " << should_exit_;
       sleep(1);
     }
-    DoTimingTask();
+    if (try_num >= options_.load_interval) {
+      DoTimingTask();
+    }
   }
   return Status::OK();
 }
 
 // Mutex should be held
-Logger* PSServer::GetLogger(const std::string &database, const std::string &table) {
+Logger* PSServer::GetLogger(const std::string &database, const std::string &table, const std::string &header) {
   std::string key = database + "/" + table; 
 
   std::unordered_map<std::string, Logger *>::const_iterator it = files_.find(key);
   if (it == files_.end()) {
-    Logger *log = new Logger(options_.data_path + key, options_.file_size);
+    Logger *log = new Logger(options_.data_path + key, options_.file_size, header);
     files_[key] = log;
     return log;
   } else {
@@ -71,6 +73,12 @@ Logger* PSServer::GetLogger(const std::string &database, const std::string &tabl
 
 void PSServer::DoTimingTask() {
   std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script;
+  //std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + " &";
   DLOG(INFO) << "Cron Load: " << cmd;
-  system(cmd.c_str());
+
+  int ret = system(cmd.c_str());
+  DLOG(INFO) << "Cron return: " << ret;
+  if (WIFSIGNALED(ret) && (WTERMSIG(ret) == SIGINT || WTERMSIG(ret) == SIGQUIT)) {
+    Exit();
+  }
 }

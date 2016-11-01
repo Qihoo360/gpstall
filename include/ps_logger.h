@@ -25,7 +25,7 @@ class Version;
 
 class Logger {
  public:
-  Logger(const std::string& log_path, const int file_size = 100 * 1024 * 1024);
+  Logger(const std::string& log_path, const int file_size = 100 * 1024 * 1024, const std::string& header = "");
   ~Logger();
 
   void Lock()         { mutex_.Lock(); }
@@ -47,6 +47,8 @@ class Logger {
   std::string filename;
 
  private:
+
+  std::string header_;
 
   Version* version_;
   slash::WritableFile *queue_;

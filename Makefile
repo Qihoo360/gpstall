@@ -69,7 +69,9 @@ all: $(BIN)
 	mkdir $(OUTPUT)/lib
 	cp -r $(SO_PATH)/*  $(OUTPUT)/lib
 	mv $(BIN) $(OUTPUT)/bin/
-	cp $(SCRIPT_PATH)/* $(OUTPUT)/bin/
+	cp $(SCRIPT_PATH)/load.sh $(OUTPUT)/bin/
+	cp $(SCRIPT_PATH)/gpload.yaml.ori $(OUTPUT)/bin/
+	#cp $(SCRIPT_PATH)/* $(OUTPUT)/bin/
 	#mkdir $(OUTPUT)/tools
 	@echo "Success, go, go, go..."
 

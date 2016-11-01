@@ -28,7 +28,7 @@ int PSClientConn::DealMessage() {
 
   {
     slash::MutexLock l(&(ps_server->mutex_files_));
-    Logger* log = ps_server->GetLogger(dbname_, parser_.table_);
+    Logger* log = ps_server->GetLogger(dbname_, parser_.table_, parser_.header_);
     for (size_t i = 0; i < parser_.rows_.size(); i++) {
       log->Put(parser_.rows_[i] + "\n");
     }

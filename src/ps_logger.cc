@@ -55,8 +55,9 @@ Status Version::Init() {
 /*
  * Logger
  */
-Logger::Logger(const std::string& log_path, const int file_size)
-  : version_(NULL),
+Logger::Logger(const std::string& log_path, const int file_size, const std::string &header)
+  : header_(header),
+    version_(NULL),
     queue_(NULL),
     versionfile_(NULL),
     pro_num_(0),
@@ -97,6 +98,10 @@ Logger::Logger(const std::string& log_path, const int file_size)
 
     version_ = new Version(versionfile_);
     version_->StableSave();
+
+    if (!header_.empty()) {
+      Put(header_);
+    }
   } else {
     DLOG(INFO) << "Logger: Find the exist file.";
 
@@ -152,9 +157,16 @@ Status Logger::Put(const std::string &item) {
 
     {
       slash::RWLock(&(version_->rwlock_), true);
-      version_->pro_offset_ = 0;
       version_->pro_num_ = pro_num_;
+      version_->pro_offset_ = 0;
       version_->StableSave();
+
+      if (!header_.empty()) {
+        s = queue_->Append(header_);
+        if (s.ok()) {
+          version_->pro_offset_ += item.size();
+        }
+      }
     }
   }
 

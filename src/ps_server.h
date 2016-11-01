@@ -45,7 +45,7 @@ class PSServer {
     should_exit_ = true;
   }
 
-  Logger* GetLogger(const std::string &database, const std::string &table);
+  Logger* GetLogger(const std::string &database, const std::string &table, const std::string &header);
 
   slash::Mutex mutex_files_;
 
