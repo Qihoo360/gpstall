@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
 void Usage() {
   printf ("Usage:\n"
           "  ./pgstall --local_ip local_ip --local_port local_port --worker_num 8 --data_path path --log_path path"
-          " --file_size 40000000 --load_interval 60\n"
+          " --file_size 40000000 --load_interval 60 --flush_interval 1800\n"
           "   these Options are optional.\n");
 }
 
@@ -84,12 +84,13 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
     {"worker_num", required_argument, NULL, 'w'},
     {"file_size", required_argument, NULL, 'f'},
     {"load_interval", required_argument, NULL, 'i'},
+    {"flush_interval", required_argument, NULL, 's'},
     {"data_path", required_argument, NULL, 'd'},
     {"log_path", required_argument, NULL, 'l'},
     {"help", no_argument, NULL, 'h'},
     {NULL, 0, NULL, 0}, };
 
-  const char* short_options = "n:p:w:f:i:d:l:h";
+  const char* short_options = "n:p:w:f:i:s:d:l:h";
 
   int ch, longindex;
   while ((ch = getopt_long(argc, argv, short_options, long_options,
@@ -109,6 +110,9 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
         break;
       case 'i':
         options.load_interval = atoi(optarg);
+        break;
+      case 's':
+        options.flush_interval = atoi(optarg);
         break;
       case 'd':
         options.data_path = optarg;

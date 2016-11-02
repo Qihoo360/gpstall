@@ -49,6 +49,9 @@ Status PSServer::Start() {
     while (!should_exit_ && try_num++ < options_.load_interval) {
       //DLOG(INFO) << "should_exit_ " << should_exit_;
       sleep(1);
+      if (try_num % 2 == 0) {
+        MaybeFlushLog();
+      }
     }
     if (try_num >= options_.load_interval) {
       DoTimingTask();
@@ -71,9 +74,33 @@ Logger* PSServer::GetLogger(const std::string &database, const std::string &tabl
   }
 }
 
+void PSServer::MaybeFlushLog() {
+  struct timeval now;
+  gettimeofday(&now, NULL);
+
+  slash::MutexLock l(&mutex_files_); 
+  DLOG(INFO) << "MaybeFlushLog start";
+  std::unordered_map<std::string, Logger *>::iterator it = files_.begin();
+  for (; it != files_.end(); it++) {
+    Logger* log = it->second;
+    if (now.tv_sec - log->last_action_.tv_sec >= options_.flush_interval) {
+      uint32_t filenum;
+      uint64_t offset;
+      log->GetProducerStatus(&filenum, &offset);
+      //LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
+      if (log->Flush().ok()) {
+        LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
+      }
+    }
+  }
+  DLOG(INFO) << "MaybeFlushLog end ";
+}
+
 void PSServer::DoTimingTask() {
-  std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script;
+  std::string cmd = "flock -xn /tmp/pgstall.lock -c \"sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + "\"";
+  //std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script;
   //std::string cmd = "sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + " &";
+
   DLOG(INFO) << "Cron Load: " << cmd;
 
   int ret = system(cmd.c_str());

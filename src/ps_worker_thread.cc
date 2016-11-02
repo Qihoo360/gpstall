@@ -28,15 +28,15 @@ void PSWorkerThread::CronHandle() {
     slash::RWLock l(&rwlock_, false); // Use ReadLock to iterate the conns_
     std::map<int, void*>::iterator iter = conns_.begin();
 
-//    while (iter != conns_.end()) {
-//
-//      // TODO simple 3s
-//      if (now.tv_sec - static_cast<PSClientConn*>(iter->second)->last_interaction().tv_sec > 5) {
-//        LOG(INFO) << "Find Timeout Client: " << static_cast<PSClientConn*>(iter->second)->ip_port();
-//        AddCronTask(WorkerCronTask{TASK_KILL, static_cast<PSClientConn*>(iter->second)->ip_port()});
-//      }
-//      iter++;
-//    }
+    while (iter != conns_.end()) {
+
+      // TODO simple 300s
+      if (now.tv_sec - static_cast<PSClientConn*>(iter->second)->last_interaction().tv_sec > 300) {
+        LOG(INFO) << "Find Timeout Client: " << static_cast<PSClientConn*>(iter->second)->ip_port();
+        AddCronTask(WorkerCronTask{TASK_KILL, static_cast<PSClientConn*>(iter->second)->ip_port()});
+      }
+      iter++;
+    }
   }
 
   {

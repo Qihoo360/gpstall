@@ -6,6 +6,7 @@
 #include <string>
 #include <deque>
 #include <pthread.h>
+#include <sys/time.h>
 
 #ifndef __STDC_FORMAT_MACROS
 # define __STDC_FORMAT_MACROS
@@ -32,6 +33,7 @@ class Logger {
   void Unlock()       { mutex_.Unlock(); }
 
   Status Put(const std::string& item);
+  Status Flush();
 
   Status GetProducerStatus(uint32_t* filenum, uint64_t* pro_offset);
 
@@ -45,6 +47,7 @@ class Logger {
   }
 
   std::string filename;
+  struct timeval last_action_;
 
  private:
 
@@ -60,6 +63,8 @@ class Logger {
   std::string log_path_;
 
   uint64_t file_size_;
+
+  bool empty_file_;
 
   // Not use
   //int32_t retry_;

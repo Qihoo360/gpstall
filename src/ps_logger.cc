@@ -102,6 +102,7 @@ Logger::Logger(const std::string& log_path, const int file_size, const std::stri
     if (!header_.empty()) {
       Put(header_);
     }
+    empty_file_ = true;
   } else {
     DLOG(INFO) << "Logger: Find the exist file.";
 
@@ -120,7 +121,11 @@ Logger::Logger(const std::string& log_path, const int file_size, const std::stri
     profile = NewFileName(filename, pro_num_);
     DLOG(INFO) << "Logger: open profile " << profile;
     slash::AppendWritableFile(profile, &queue_, version_->pro_offset_);
+    
+    uint64_t filesize = queue_->Filesize();
+    empty_file_ = filesize > 0 ? false : true;
   }
+  gettimeofday(&last_action_, NULL);
 }
 
 Logger::~Logger() {
@@ -164,8 +169,9 @@ Status Logger::Put(const std::string &item) {
       if (!header_.empty()) {
         s = queue_->Append(header_);
         if (s.ok()) {
-          version_->pro_offset_ += item.size();
+          version_->pro_offset_ += header_.size();
         }
+        empty_file_ = true;
       }
     }
   }
@@ -175,6 +181,42 @@ Status Logger::Put(const std::string &item) {
     slash::RWLock(&(version_->rwlock_), true);
     version_->pro_offset_ += item.size();
   }
+  empty_file_ = false;
 
+  gettimeofday(&last_action_, NULL);
   return s;
+}
+
+Status Logger::Flush() {
+  Status s;
+
+  if (!empty_file_) {
+    delete queue_;
+    queue_ = NULL;
+    std::string old_filename = NewFileName(filename, pro_num_);
+    slash::RenameFile(old_filename, old_filename + kLoggerSuffix);
+
+    pro_num_++;
+    std::string profile = NewFileName(filename, pro_num_);
+    slash::NewWritableFile(profile, &queue_);
+
+    {
+      slash::RWLock(&(version_->rwlock_), true);
+      version_->pro_num_ = pro_num_;
+      version_->pro_offset_ = 0;
+      version_->StableSave();
+
+      if (!header_.empty()) {
+        s = queue_->Append(header_);
+        if (s.ok()) {
+          version_->pro_offset_ += header_.size();
+        }
+        empty_file_ = true;
+      }
+    }
+    gettimeofday(&last_action_, NULL);
+    return Status::OK();
+  } else {
+    return Status::NotFound("");
+  }
 }

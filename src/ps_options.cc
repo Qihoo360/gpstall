@@ -12,6 +12,7 @@ PSOptions::PSOptions()
     worker_num(8),
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
+    flush_interval(kFlushCronInterval),
     data_path("./data"),
     log_path("./log") {
   if (data_path.back() != '/') {
@@ -45,6 +46,7 @@ PSOptions::PSOptions(const PSOptions& options)
     worker_num(options.worker_num),
     file_size(options.file_size),
     load_interval(options.load_interval),
+    flush_interval(options.flush_interval),
     data_path(options.data_path),
     log_path(options.log_path),
     load_script(options.load_script),
@@ -73,9 +75,12 @@ void PSOptions::Dump() {
   //fprintf (stderr, "    Options.load_script : %s\n", log_path.c_str());
 
   char cwd[1024];
-  getcwd(cwd, sizeof(cwd));
-
-  LOG(INFO) << "    Current directory     : " << cwd;
+  char* ret = getcwd(cwd, sizeof(cwd));
+  if (!ret) {
+    LOG(INFO) << " Getcwd failed: " << strerror(errno);
+  } else {
+    LOG(INFO) << "    Current directory     : " << cwd;
+  }
   LOG(INFO) << "    Options.local_ip      : " << local_ip;
   LOG(INFO) << "    Options.local_port    : " << local_port;
   LOG(INFO) << "    Options.data_path     : " << data_path;
@@ -83,6 +88,7 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.worker_num    : " << worker_num;
   LOG(INFO) << "    Options.file_size     : " << file_size << " Bytes";
   LOG(INFO) << "    Options.load_interval : " << load_interval << " Seconds";
+  LOG(INFO) << "    Options.flush_interval: " << flush_interval << " Seconds";
   LOG(INFO) << "    Options.load_script   : " << load_script;
   LOG(INFO) << "    Options.conf_script   : " << conf_script;
 }

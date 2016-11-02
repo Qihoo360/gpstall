@@ -64,6 +64,7 @@ class PSServer {
   std::unordered_map<std::string, Logger*> files_;
 
   void DoTimingTask();
+  void MaybeFlushLog();
   // Background thread
 };
 
