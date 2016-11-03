@@ -47,7 +47,7 @@ class Logger {
   }
 
   std::string filename;
-  struct timeval last_action_;
+  //struct timeval last_action_;
 
  private:
 

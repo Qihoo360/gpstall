@@ -38,23 +38,29 @@ PSServer::~PSServer() {
   LOG(INFO) << "PSServerThread " << pthread_self() << " exit!!!";
 }
 
+static int GCD(int a, int b) {
+  return b == 0 ? a : GCD(b, a % b);
+}
+
 Status PSServer::Start() {
   ps_dispatch_thread_->StartThread();
 
   // TEST 
   LOG(INFO) << "PSServer started on port:" <<  options_.local_port;
 
+  int gcd = GCD(options_.load_interval, options_.flush_interval);
+  uint64_t common_check_interval = (uint64_t)options_.load_interval / gcd * options_.flush_interval;
   while (!should_exit_) {
-    int try_num = 0;
-    while (!should_exit_ && try_num++ < options_.load_interval) {
+    uint64_t try_num = 0;
+    while (!should_exit_ && ++try_num <= common_check_interval) {
       //DLOG(INFO) << "should_exit_ " << should_exit_;
       sleep(1);
-      if (try_num % 2 == 0) {
+      if (try_num % options_.flush_interval == 0) {
         MaybeFlushLog();
       }
-    }
-    if (try_num >= options_.load_interval) {
-      DoTimingTask();
+      if (try_num % options_.load_interval == 0) {
+        DoTimingTask();
+      }
     }
   }
   return Status::OK();
@@ -83,14 +89,12 @@ void PSServer::MaybeFlushLog() {
   std::unordered_map<std::string, Logger *>::iterator it = files_.begin();
   for (; it != files_.end(); it++) {
     Logger* log = it->second;
-    if (now.tv_sec - log->last_action_.tv_sec >= options_.flush_interval) {
-      uint32_t filenum;
-      uint64_t offset;
-      log->GetProducerStatus(&filenum, &offset);
-      //LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
-      if (log->Flush().ok()) {
-        LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
-      }
+    uint32_t filenum;
+    uint64_t offset;
+    log->GetProducerStatus(&filenum, &offset);
+    //LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
+    if (log->Flush().ok()) {
+      LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
     }
   }
   DLOG(INFO) << "MaybeFlushLog end ";

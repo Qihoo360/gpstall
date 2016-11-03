@@ -125,7 +125,7 @@ Logger::Logger(const std::string& log_path, const int file_size, const std::stri
     uint64_t filesize = queue_->Filesize();
     empty_file_ = filesize > 0 ? false : true;
   }
-  gettimeofday(&last_action_, NULL);
+  //gettimeofday(&last_action_, NULL);
 }
 
 Logger::~Logger() {
@@ -183,7 +183,7 @@ Status Logger::Put(const std::string &item) {
   }
   empty_file_ = false;
 
-  gettimeofday(&last_action_, NULL);
+  //gettimeofday(&last_action_, NULL);
   return s;
 }
 
@@ -214,7 +214,7 @@ Status Logger::Flush() {
         empty_file_ = true;
       }
     }
-    gettimeofday(&last_action_, NULL);
+    //gettimeofday(&last_action_, NULL);
     return Status::OK();
   } else {
     return Status::NotFound("");
