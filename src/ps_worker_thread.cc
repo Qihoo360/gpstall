@@ -31,7 +31,7 @@ void PSWorkerThread::CronHandle() {
     while (iter != conns_.end()) {
 
       // TODO simple 300s
-      if (now.tv_sec - static_cast<PSClientConn*>(iter->second)->last_interaction().tv_sec > 300) {
+      if (now.tv_sec - static_cast<PSClientConn*>(iter->second)->last_interaction().tv_sec > 600) {
         LOG(INFO) << "Find Timeout Client: " << static_cast<PSClientConn*>(iter->second)->ip_port();
         AddCronTask(WorkerCronTask{TASK_KILL, static_cast<PSClientConn*>(iter->second)->ip_port()});
       }
