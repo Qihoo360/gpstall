@@ -39,6 +39,9 @@ class PSServer {
   int local_port() {
     return options_.local_port;
   }
+  std::string passwd() {
+    return options_.passwd;
+  }
 
   void Exit() {
     //printf ("Server will exit!\n");

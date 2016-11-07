@@ -51,7 +51,8 @@ PSOptions::PSOptions(const PSOptions& options)
     data_path(options.data_path),
     log_path(options.log_path),
     load_script(options.load_script),
-    conf_script(options.conf_script) {
+    conf_script(options.conf_script),
+    passwd(options.passwd) {
   if (data_path.back() != '/') {
     data_path.append(1, '/');
   }
@@ -93,4 +94,5 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.load_script   : " << load_script;
   LOG(INFO) << "    Options.conf_script   : " << conf_script;
   LOG(INFO) << "    Options.daemon_mode   : " << daemon_mode;
+  DLOG(INFO) << "    Options.passwd        : " << passwd;
 }

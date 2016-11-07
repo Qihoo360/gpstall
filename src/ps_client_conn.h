@@ -27,6 +27,7 @@ class PSClientConn : public pink::PGConn {
   PSWorkerThread* self_thread_;
 
   virtual pink::Status AppendWelcome();
+  virtual bool Login();
 };
 
 #endif

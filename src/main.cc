@@ -79,8 +79,9 @@ void Usage() {
           "  -f, --file_size=NUM\n"
           "  -i, --load_interval=NUM(Second)\n"
           "  -s, --flush_interval=NUM(Second)\n"
-          "  -x  enable daemon mode\n"
           "  -c, --conf_file=CONFIGURATION_FILE\n"
+          "  -a, --passwd=PASSWORD\n"
+          "  -x  enable daemon mode\n"
           );
 }
 
@@ -124,10 +125,11 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
     {"data_path", required_argument, NULL, 'd'},
     {"log_path", required_argument, NULL, 'l'},
     {"conf_file", required_argument, NULL, 'c'},
+    {"passwd", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {NULL, 0, NULL, 0}, };
 
-  const char* short_options = "n:p:w:f:i:s:d:l:h:c:x";
+  const char* short_options = "n:p:w:f:i:s:d:l:a:h:c:x";
 
   int ch, longindex;
   while ((ch = getopt_long(argc, argv, short_options, long_options,
@@ -159,6 +161,9 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
         break;
       case 'x':
         options.daemon_mode = true;
+        break;
+      case 'a':
+        options.passwd = optarg;
         break;
       case 'c':
         if (GetOptionFromFile(optarg, options) != 0) {
