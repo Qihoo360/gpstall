@@ -4,6 +4,21 @@
 #include <string>
 #include <vector>
 
+// configuration item name
+const std::string DEFAULT_CONFIGURATION_FILE = "conf/pgstall.conf";
+const std::string LOCAL_IP = "local_ip";
+const std::string LOCAL_PORT = "local_port";
+const std::string WORKER_NUM = "worker_num";
+const std::string FILE_SIZE = "file_size";
+const std::string LOAD_INTERVAL = "load_interval";
+const std::string FLUSH_INTERVAL = "flush_interval";
+const std::string TIMEOUT = "timeout";
+const std::string DATA_PATH = "data_path";
+const std::string LOG_PATH = "log_path";
+const std::string LOAD_SCRIPT = "load_script";
+const std::string CONF_SCRIPT = "conf_script";
+const std::string DAEMON_MODE = "daemon_mode";
+
 class Server;
 struct PSOptions;
 
@@ -45,6 +60,8 @@ struct PSOptions {
   std::string log_path;
   std::string load_script;
   std::string conf_script;
+
+  bool daemon_mode;
 
   //std::vector<Server> servers;
 

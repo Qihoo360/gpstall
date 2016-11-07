@@ -13,6 +13,7 @@ PSOptions::PSOptions()
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
     flush_interval(kFlushCronInterval),
+    daemon_mode(false),
     data_path("./data"),
     log_path("./log") {
   if (data_path.back() != '/') {
@@ -91,4 +92,5 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.flush_interval: " << flush_interval << " Seconds";
   LOG(INFO) << "    Options.load_script   : " << load_script;
   LOG(INFO) << "    Options.conf_script   : " << conf_script;
+  LOG(INFO) << "    Options.daemon_mode   : " << daemon_mode;
 }
