@@ -48,3 +48,9 @@ pink::Status PSClientConn::AppendWelcome() {
 
   return AppendObuf(packet->buf, packet->write_pos);
 }
+
+// TODO use passwd from conf file
+bool PSClientConn::Login() {
+  DLOG(INFO) << "passwd_=" << passwd_;
+  return passwd_.compare("abc") == 0;
+}
