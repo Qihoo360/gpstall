@@ -52,5 +52,5 @@ pink::Status PSClientConn::AppendWelcome() {
 // TODO use passwd from conf file
 bool PSClientConn::Login() {
   DLOG(INFO) << "passwd_=" << passwd_;
-  return passwd_.compare("abc") == 0;
+  return passwd_ == ps_server->passwd();
 }
