@@ -46,6 +46,42 @@ static void PSSignalSetup() {
   signal(SIGTERM, &IntSigHandle);
 }
 
+static void close_std() {
+  int fd;
+  if ((fd = open("/dev/null", O_RDWR, 0)) != -1) {
+      dup2(fd, STDIN_FILENO);
+      dup2(fd, STDOUT_FILENO);
+      dup2(fd, STDERR_FILENO);
+      close(fd);
+    }
+}
+
+static int daemonize() {
+  pid_t pid;
+  umask(0);
+
+  if ((pid = fork()) < 0) {
+    LOG(FATAL) << "can't fork" << std::endl;
+    return -1;
+  } else if (pid != 0)
+    exit(0);
+  setsid();
+
+  close_std();
+
+  // create pid file
+  FILE *fp = fopen(kPidFile.c_str(), "w");
+  if (fp) {
+    fprintf(fp, "%d\n", (int)getpid());
+    fclose(fp);
+  } else {
+    LOG(FATAL) << "can't create pid file" << std::endl;
+    return -1;
+  }
+
+  return 0;
+}
+
 int main(int argc, char** argv) {
   PSOptions options;
 
@@ -53,10 +89,14 @@ int main(int argc, char** argv) {
 
   //options.Dump();
   GlogInit(options);
+
+  if (options.daemon_mode) {
+    if (daemonize() != 0)
+      return -1;
+  }
   PSSignalSetup();
 
   ps_server = new PSServer(options);
-
   ps_server->Start();
 
   //printf ("Exit\n");

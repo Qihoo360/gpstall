@@ -3,6 +3,8 @@
 
 #include <string>
 
+const std::string kPidFile = "pgstall.pid";
+
 const int kMaxWorkerThread = 32;
 
 const int kWorkerCronInterval = 1000;
