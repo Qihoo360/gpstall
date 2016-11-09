@@ -24,8 +24,8 @@ static void GlogInit(const PSOptions& options) {
   FLAGS_alsologtostderr = true;
 
   FLAGS_log_dir = options.log_path;
-  FLAGS_minloglevel = 0;
-  FLAGS_max_log_size = 1800;
+  FLAGS_minloglevel = options.minloglevel;
+  FLAGS_max_log_size = options.maxlogsize;
   // TODO rm
   FLAGS_logbufsecs = 0;
 
@@ -129,6 +129,8 @@ int GetOptionFromFile(const std::string &configuration_file, PSOptions& options)
   // TODO timeout
   b.GetConfStr(DATA_PATH, &options.data_path);
   b.GetConfStr(LOG_PATH, &options.log_path);
+  b.GetConfInt(MINLOGLEVEL, &options.minloglevel);
+  b.GetConfInt(MAXLOGSIZE, &options.maxlogsize);
   b.GetConfStr(LOAD_SCRIPT, &options.load_script);
   b.GetConfStr(CONF_SCRIPT, &options.conf_script);
   b.GetConfBool(DAEMON_MODE, &options.daemon_mode);

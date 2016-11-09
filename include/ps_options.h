@@ -13,11 +13,15 @@ const std::string LOAD_INTERVAL = "load_interval";
 const std::string FLUSH_INTERVAL = "flush_interval";
 const std::string TIMEOUT = "timeout";
 const std::string DATA_PATH = "data_path";
-const std::string LOG_PATH = "log_path";
 const std::string LOAD_SCRIPT = "load_script";
 const std::string CONF_SCRIPT = "conf_script";
 const std::string DAEMON_MODE = "daemon_mode";
 const std::string PASSWD = "passwd";
+
+// Log conf item name
+const std::string LOG_PATH = "log_path";
+const std::string MINLOGLEVEL = "minloglevel";
+const std::string MAXLOGSIZE= "maxlogsize";
 
 // Greenplum configuration item name
 const std::string GP_USER = "gp_user";
@@ -66,6 +70,8 @@ struct PSOptions {
 
   std::string data_path;
   std::string log_path;
+  int minloglevel;
+  int maxlogsize;
   std::string load_script;
   std::string conf_script;
   std::string passwd;
