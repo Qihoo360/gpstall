@@ -26,7 +26,7 @@ void PSDispatchThread::CronHandle() {
     server_current_qps += ((PSWorkerThread**)worker_thread())[i]->last_sec_thread_querynum();
   }
 
-  LOG(INFO) << "ClientNum: " << ClientNum() << " ClientQueryNum: " << server_querynum
+  DLOG(INFO) << "ClientNum: " << ClientNum() << " ClientQueryNum: " << server_querynum
       << " ServerCurrentQps: " << server_current_qps;
 }
 

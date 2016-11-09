@@ -1,4 +1,4 @@
-RPATH = /usr/local/pgstall/lib/
+RPATH = /usr/local/gpstall/lib/
 LFLAGS = -Wl,-rpath=$(RPATH)
 
 UNAME := $(shell if [ -f "/etc/redhat-release" ]; then echo "CentOS"; else echo "Ubuntu"; fi)
@@ -31,7 +31,7 @@ OUTPUT = ./output
 SRC = $(wildcard $(SRC_PATH)/*.cc)
 OBJS = $(patsubst %.cc,%.o,$(SRC))
 
-BIN = pgstall 
+BIN = gpstall 
 #OBJS = $(COMMON_OBJS) $(META_OBJS) $(NODE_OBJS) 
 
 

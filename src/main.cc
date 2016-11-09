@@ -109,8 +109,8 @@ int main(int argc, char** argv) {
 void Usage() {
   printf ("Usage:\n"
           "  ./pgstall [-h] [-c conf/file]\n"
-          "    -h\t\t-- show this help\n"
-          "    -c conf/file\t\t-- config file\n"
+          "    -h            -- show this help\n"
+          "    -c conf/file  -- config file\n"
           );
 }
 
