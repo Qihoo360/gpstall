@@ -1,6 +1,5 @@
 ## Intro
-* **A midlleware used to stall greenplum' Insert commands and load data by
-* gpload**
+* **A midlleware used to stall greenplum' Insert commands and load data by gpload**
 * a simple ETL tool with some limitations;
 * tested with postgre-jdbc 9.4 and php-pgsql
 * support simple Postgre Frontend/Backend protocol
@@ -8,11 +7,26 @@
   - Extended Message
 
 ## Usage
+
+### Compile
+
+* install dependencies
+* GCC 4.7+ to support c++11
+
+```powershell
+git clone https://github.com/Qihoo360/gpstall
+git submodule update --init
+make
+# for release: make __REL=1
+```
+
+### Run
+* copy output/lib/ to /usr/local/gpstall/lib/ if needed;
 ```powershell
 Usage:
- ./pgstall [-h] [-c conf/file]
-  -h            -- show this help
-  -c conf/file  -- config file
+  ./pgstall [-h] [-c conf/file]
+    -h            -- show this help
+    -c conf/file  -- config file
 ```
 
 ### Configuration
@@ -62,8 +76,7 @@ WARNING: psql version 8.3, server version 0.0.
 Some psql features might not work.
 Type "help" for help.
 
-test_db=# INSERT INTO test_table("name", "id") VALUES
-('zhang', 1);
+test_db=# INSERT INTO test_table("name", "id") VALUES ('zhang', 1);
 INSERT 0 1
 ```
 
