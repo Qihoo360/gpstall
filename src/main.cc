@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
 
 void Usage() {
   printf ("Usage:\n"
-          "  ./pgstall [-h] [-c conf/file]\n"
+          "  ./gpstall [-h] [-c conf/file]\n"
           "    -h            -- show this help\n"
           "    -c conf/file  -- config file\n"
           );
@@ -119,7 +119,7 @@ int GetOptionFromFile(const std::string &configuration_file, PSOptions& options)
   if (b.LoadConf() != 0)
     return -1;
 
-  // pgstall conf
+  // gpstall conf
   b.GetConfStr(LOCAL_IP, &options.local_ip);
   b.GetConfInt(LOCAL_PORT, &options.local_port);
   b.GetConfInt(WORKER_NUM, &options.worker_num);

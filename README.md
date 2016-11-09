@@ -24,7 +24,7 @@ make
 * copy output/lib/ to /usr/local/gpstall/lib/ if needed;
 ```powershell
 Usage:
-  ./pgstall [-h] [-c conf/file]
+  ./gpstall [-h] [-c conf/file]
     -h            -- show this help
     -c conf/file  -- config file
 ```
@@ -32,7 +32,7 @@ Usage:
 ### Configuration
 
 ```powershell
-### pgstall conf
+### gpstall conf
 local_ip : 127.0.0.1
 local_port : 8001
 worker_num : 8
@@ -71,7 +71,7 @@ error_limit : 50000
 ```powershell
 $ psql -h 127.0.0.1 -p 8001 -U user test_db
 Password for user user:
-psql (8.3.23, server pgstall0.1)
+psql (8.3.23, server gpstall0.1)
 WARNING: psql version 8.3, server version 0.0.
 Some psql features might not work.
 Type "help" for help.

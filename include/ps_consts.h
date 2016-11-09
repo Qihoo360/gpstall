@@ -3,7 +3,7 @@
 
 #include <string>
 
-const std::string kPidFile = "pgstall.pid";
+const std::string kPidFile = "gpstall.pid";
 
 const int kMaxWorkerThread = 32;
 

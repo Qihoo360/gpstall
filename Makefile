@@ -32,7 +32,6 @@ SRC = $(wildcard $(SRC_PATH)/*.cc)
 OBJS = $(patsubst %.cc,%.o,$(SRC))
 
 BIN = gpstall 
-#OBJS = $(COMMON_OBJS) $(META_OBJS) $(NODE_OBJS) 
 
 
 INCLUDE_PATH = -I./include/ \

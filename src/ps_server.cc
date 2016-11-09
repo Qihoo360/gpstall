@@ -101,8 +101,8 @@ void PSServer::MaybeFlushLog() {
 }
 
 void PSServer::DoTimingTask() {
-  // std::string cmd = "flock -xn /tmp/pgstall.lock -c \"sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + "\"";
-  const char *cmd_format = "flock -xn /tmp/pgstall.lock -c \"sh %s %s %s %s %s %d %s %d %d\"";
+  // std::string cmd = "flock -xn /tmp/gpstall.lock -c \"sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + "\"";
+  const char *cmd_format = "flock -xn /tmp/gpstall.lock -c \"sh %s %s %s %s %s %d %s %d %d\"";
   char cmd[2048] = {0};
   sprintf(cmd, cmd_format, options_.load_script.c_str(), options_.data_path.c_str(), options_.conf_script.c_str(),
                           options_.gp_user.c_str(), options_.gp_host.c_str(), options_.gp_port,

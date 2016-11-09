@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR=${1:-/path/for/pgstall/data}
+DIR=${1:-/path/for/gpstall/data}
 ORI_CONF=${2:-./gpload.yaml.ori}
 # test
 TMP_CONF=${3:-/tmp/gpload.yaml.tmp}
