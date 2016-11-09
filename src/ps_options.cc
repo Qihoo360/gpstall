@@ -13,9 +13,16 @@ PSOptions::PSOptions()
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
     flush_interval(kFlushCronInterval),
-    daemon_mode(false),
     data_path("./data"),
-    log_path("./log") {
+    log_path("./log"),
+    passwd("passwd"),
+    daemon_mode(false),
+    gp_user("gp_user"),
+    gp_host("127.0.0.1"),
+    gp_port(15432),
+    gpd_host("127.0.0.1"),
+    gpd_port(8081),
+    error_limit(50000) {
   if (data_path.back() != '/') {
     data_path.append(1, '/');
   }
@@ -52,7 +59,14 @@ PSOptions::PSOptions(const PSOptions& options)
     log_path(options.log_path),
     load_script(options.load_script),
     conf_script(options.conf_script),
-    passwd(options.passwd) {
+    passwd(options.passwd),
+    daemon_mode(options.daemon_mode),
+    gp_user(options.gp_user),
+    gp_host(options.gp_host),
+    gp_port(options.gp_port),
+    gpd_host(options.gpd_host),
+    gpd_port(options.gpd_port),
+    error_limit(options.error_limit) {
   if (data_path.back() != '/') {
     data_path.append(1, '/');
   }
@@ -94,5 +108,11 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.load_script   : " << load_script;
   LOG(INFO) << "    Options.conf_script   : " << conf_script;
   LOG(INFO) << "    Options.daemon_mode   : " << daemon_mode;
+  LOG(INFO) << "    Options.gp_user       : " << gp_user;
+  LOG(INFO) << "    Options.gp_host       : " << gp_host;
+  LOG(INFO) << "    Options.gp_port       : " << gp_port;
+  LOG(INFO) << "    Options.gpd_host      : " << gpd_host;
+  LOG(INFO) << "    Options.gpd_port      : " << gpd_port;
+  LOG(INFO) << "    Options.error_limit   : " << error_limit;
   DLOG(INFO) << "    Options.passwd        : " << passwd;
 }

@@ -87,10 +87,10 @@ int main(int argc, char** argv) {
 
   ParseArgs(argc, argv, options);
 
-  //options.Dump();
   GlogInit(options);
 
   if (options.daemon_mode) {
+    std::cout << "Running in daemon mode." << std::endl;
     if (daemonize() != 0)
       return -1;
   }
@@ -108,20 +108,9 @@ int main(int argc, char** argv) {
 
 void Usage() {
   printf ("Usage:\n"
-          "  ./pgstall [argument]\n"
-          "  ./pgstall -c configuration file\n"
-          "Arguments(Optional):\n"
-          "  -n, --local_ip=IP\n"
-          "  -p, --local_port=NUM\n"
-          "  -w, --worker_num=NUM\n"
-          "  -d, --data_path=PATH_TO_DATA\n"
-          "  -l, --log_path=PATH_TO_LOGS\n"
-          "  -f, --file_size=NUM\n"
-          "  -i, --load_interval=NUM(Second)\n"
-          "  -s, --flush_interval=NUM(Second)\n"
-          "  -c, --conf_file=CONFIGURATION_FILE\n"
-          "  -a, --passwd=PASSWORD\n"
-          "  -x  enable daemon mode\n"
+          "  ./pgstall [-h] [-c conf/file]\n"
+          "    -h\t\t-- show this help\n"
+          "    -c conf/file\t\t-- config file\n"
           );
 }
 
@@ -130,6 +119,7 @@ int GetOptionFromFile(const std::string &configuration_file, PSOptions& options)
   if (b.LoadConf() != 0)
     return -1;
 
+  // pgstall conf
   b.GetConfStr(LOCAL_IP, &options.local_ip);
   b.GetConfInt(LOCAL_PORT, &options.local_port);
   b.GetConfInt(WORKER_NUM, &options.worker_num);
@@ -143,67 +133,38 @@ int GetOptionFromFile(const std::string &configuration_file, PSOptions& options)
   b.GetConfStr(CONF_SCRIPT, &options.conf_script);
   b.GetConfBool(DAEMON_MODE, &options.daemon_mode);
 
+  // greenplum conf
+  b.GetConfStr(GP_USER, &options.gp_user);
+  b.GetConfStr(PASSWD, &options.passwd);
+  b.GetConfStr(GP_HOST, &options.gp_host);
+  b.GetConfInt(GP_PORT, &options.gp_port);
+
+  // gpfdist conf
+  b.GetConfStr(GPD_HOST, &options.gpd_host);
+  b.GetConfInt(GPD_PORT, &options.gpd_port);
+  b.GetConfInt(ERROR_LIMIT, &options.error_limit);
   return 0;
 }
 
 void ParseArgs(int argc, char* argv[], PSOptions& options) {
   if (argc < 2) {
-    if (GetOptionFromFile(DEFAULT_CONFIGURATION_FILE, options) != 0) {
-      Usage();
-      exit(-1);
-    } else
-      return;
+    Usage();
+    exit(-1);
   }
 
   const struct option long_options[] = {
-    {"local_ip", required_argument, NULL, 'n'},
-    {"local_port", required_argument, NULL, 'p'},
-    {"worker_num", required_argument, NULL, 'w'},
-    {"file_size", required_argument, NULL, 'f'},
-    {"load_interval", required_argument, NULL, 'i'},
-    {"flush_interval", required_argument, NULL, 's'},
-    {"data_path", required_argument, NULL, 'd'},
-    {"log_path", required_argument, NULL, 'l'},
     {"conf_file", required_argument, NULL, 'c'},
-    {"passwd", required_argument, NULL, 'a'},
     {"help", no_argument, NULL, 'h'},
     {NULL, 0, NULL, 0}, };
 
-  const char* short_options = "n:p:w:f:i:s:d:l:a:h:c:x";
+  const char* short_options = "h:c:x";
 
   int ch, longindex;
   while ((ch = getopt_long(argc, argv, short_options, long_options,
                            &longindex)) >= 0) {
     switch (ch) {
-      case 'n':
-        options.local_ip = optarg;
-        break;
-      case 'p':
-        options.local_port = atoi(optarg);
-        break;
-      case 'w':
-        options.worker_num = atoi(optarg);
-        break;
-      case 'f':
-        options.file_size = atoi(optarg);
-        break;
-      case 'i':
-        options.load_interval = atoi(optarg);
-        break;
-      case 's':
-        options.flush_interval = atoi(optarg);
-        break;
-      case 'd':
-        options.data_path = optarg;
-        break;
-      case 'l':
-        options.log_path = optarg;
-        break;
       case 'x':
         options.daemon_mode = true;
-        break;
-      case 'a':
-        options.passwd = optarg;
         break;
       case 'c':
         if (GetOptionFromFile(optarg, options) != 0) {

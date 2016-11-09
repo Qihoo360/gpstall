@@ -2,15 +2,15 @@
 VERSION: 1.0.0.1
 # describe the Greenplum database parameters
 DATABASE: {DATABASE}
-USER: user
-HOST: x.x.x.x
-PORT: xxxx 
+USER: {GPUSER}
+HOST: {GPHOST}
+PORT: {GPPORT}
 GPLOAD:
    INPUT:
     - SOURCE:
          LOCAL_HOSTNAME:
-           - y.y.y.y 
-         PORT: zzzz 
+           - {GPDHOST}
+         PORT: {GPDPORT}
          FILE:{FILE}
     - FORMAT: csv
     - QUOTE: '"'
@@ -18,7 +18,7 @@ GPLOAD:
     #- HEADER: true
     #- COLUMNS:
     #     - attr1:
-    - ERROR_LIMIT: 50000
+    - ERROR_LIMIT: {ERROR_LIMIT}
    EXTERNAL:
     - SCHEMA: '%'
    OUTPUT:

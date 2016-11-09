@@ -65,7 +65,7 @@ all: $(BIN)
 	rm -rf $(OUTPUT)
 	mkdir $(OUTPUT)
 	mkdir $(OUTPUT)/bin
-	cp -r ./conf $(OUTPUT)/bin
+	cp -r ./conf $(OUTPUT)
 	mkdir $(OUTPUT)/lib
 	cp -r $(SO_PATH)/*  $(OUTPUT)/lib
 	mv $(BIN) $(OUTPUT)/bin/
