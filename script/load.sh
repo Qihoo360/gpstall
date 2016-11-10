@@ -2,21 +2,32 @@
 DIR=${1:-/path/for/gpstall/data}
 ORI_CONF=${2:-./gpload.yaml.ori}
 # test
-TMP_CONF=${3:-/tmp/gpload.yaml.tmp}
-GP_USER=$4
+GP_USER=$3
+PASSWD=$4
 GP_HOST=$5
 GP_PORT=$6
 GPD_HOST=$7
 GPD_PORT=$8
 ERROR_LIMIT=$9
+TMP_CONF=${10:-/tmp/gpload.yaml.tmp}
 
 echo "================================"
 echo "  start at    :  `date '+%Y-%m-%d %H:%M:%S'` ..."
 echo "  data_path   :  $DIR"
 echo "  gpload.yaml :  $ORI_CONF"
+echo "  gp_host     :  $GP_HOST"
+echo "  gp_user     :  $GP_USER"
+echo "  gp_port     :  $GP_PORT"
+echo "  gpdist_host :  $GPD_HOST"
+echo "  gpdist_port :  $GPD_PORT"
+echo "  error_limit :  $ERROR_LIMIT"
+#echo "  passwd      :  $PASSWD"
 echo "--------------------------------"
 echo ""
 
+export PGPASSWORD=$PASSWD
+#echo "env: "
+#printenv 
 for database in `ls $DIR` ; do
   #echo "Database: $database"
   for table in `ls $DIR"/"$database` ; do

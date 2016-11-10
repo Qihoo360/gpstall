@@ -39,6 +39,9 @@ class PSServer {
   int local_port() {
     return options_.local_port;
   }
+  std::string gp_user() {
+    return options_.gp_user;
+  }
   std::string passwd() {
     return options_.passwd;
   }

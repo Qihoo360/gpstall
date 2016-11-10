@@ -50,7 +50,15 @@ pink::Status PSClientConn::AppendWelcome() {
 }
 
 // TODO use passwd from conf file
-bool PSClientConn::Login() {
-  DLOG(INFO) << "passwd_=" << passwd_;
-  return passwd_ == ps_server->passwd();
+bool PSClientConn::CheckUser(const std::string &user) {
+  DLOG(INFO) << "Check User user=" << user;
+  return user == ps_server->gp_user();
+}
+bool PSClientConn::CheckPasswd(const std::string &passwd) {
+  DLOG(INFO) << "Check Passwd passwd=" << passwd_;
+  return passwd == ps_server->passwd();
+}
+
+bool PSClientConn::Glog(const std::string &msg) {
+  LOG(ERROR) << msg;
 }
