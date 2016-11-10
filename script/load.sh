@@ -1,19 +1,20 @@
 #!/bin/bash
-DIR=${1:-/path/for/gpstall/data}
-ORI_CONF=${2:-./gpload.yaml.ori}
-# test
-GP_USER=$3
-PASSWD=$4
-GP_HOST=$5
-GP_PORT=$6
-GPD_HOST=$7
-GPD_PORT=$8
-ERROR_LIMIT=$9
-TMP_CONF=${10:-/tmp/gpload.yaml.tmp}
+DATA_DIR=${1:-/path/for/gpstall/data}
+LOG_DIR=${2:-/path/for/gpstall/log}
+ORI_CONF=${3:-./gpload.yaml.ori}
+GP_USER=$4
+PASSWD=$5
+GP_HOST=$6
+GP_PORT=$7
+GPD_HOST=$8
+GPD_PORT=$9
+ERROR_LIMIT=${10}
+TMP_CONF=${11:-/tmp/gpload.yaml.tmp}
 
 echo "================================"
 echo "  start at    :  `date '+%Y-%m-%d %H:%M:%S'` ..."
-echo "  data_path   :  $DIR"
+echo "  data_path   :  $DATA_DIR"
+echo "  log_path    :  $LOG_DIR"
 echo "  gpload.yaml :  $ORI_CONF"
 echo "  gp_host     :  $GP_HOST"
 echo "  gp_user     :  $GP_USER"
@@ -28,13 +29,13 @@ echo ""
 export PGPASSWORD=$PASSWD
 #echo "env: "
 #printenv 
-for database in `ls $DIR` ; do
+for database in `ls $DATA_DIR` ; do
   #echo "Database: $database"
-  for table in `ls $DIR"/"$database` ; do
+  for table in `ls $DATA_DIR"/"$database` ; do
     echo "================================"
     echo "   Database: $database table=$table"
     echo "--------------------------------"
-    data_path=$DIR/$database/$table/
+    data_path=$DATA_DIR/$database/$table/
 
     cnt=`find $data_path -name "*csv" | wc -l`
     if [ $cnt -gt 0 ]; then
@@ -74,7 +75,7 @@ for database in `ls $DIR` ; do
       sed -i "s|{GPDPORT}|${GPD_PORT}|g" $TMP_CONF
       sed -i "s|{ERROR_LIMIT}|${ERROR_LIMIT}|g" $TMP_CONF
 
-      gpload -f $TMP_CONF
+      gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
       for file in $files ; do
         #echo " -  - " $file
         mv $file $file.used
