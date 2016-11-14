@@ -76,11 +76,22 @@ for database in `ls $DATA_DIR` ; do
       sed -i "s|{ERROR_LIMIT}|${ERROR_LIMIT}|g" $TMP_CONF
 
       gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
-      for file in $files ; do
-        #echo " -  - " $file
-        mv $file $file.used
-        #rm $file
-      done
+      if [ $? -eq 0 ] ; then
+        for file in $files ; do
+          #echo " OK! we rm csv    -  - " $file
+          # we rm successful csv
+          rm -f $file
+        done
+
+      else 
+        failed_path=${data_path}/failed/
+        mkdir -p $failed_path
+        for file in $files ; do
+          #echo " Failed! we mv csv -  - " $file
+          # we mv failed csv
+          mv $file $failed_path/
+        done
+      fi
 
       #rm -f $TMP_CONF 
       echo ""
