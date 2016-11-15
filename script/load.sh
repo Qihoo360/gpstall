@@ -75,6 +75,10 @@ for database in `ls $DATA_DIR` ; do
       sed -i "s|{GPDPORT}|${GPD_PORT}|g" $TMP_CONF
       sed -i "s|{ERROR_LIMIT}|${ERROR_LIMIT}|g" $TMP_CONF
 
+      if [ ! -d $LOG_DIR ] ; then
+        mkdir -p $LOG_DIR
+      fi
+
       gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
       if [ $? -eq 0 ] ; then
         for file in $files ; do
