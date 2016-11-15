@@ -37,9 +37,9 @@ for database in `ls $DATA_DIR` ; do
     echo "--------------------------------"
     data_path=$DATA_DIR/$database/$table/
 
-    cnt=`find $data_path -name "*csv" | wc -l`
+    cnt=`find $data_path -maxdepth 1 -name "*csv" | wc -l`
     if [ $cnt -gt 0 ]; then
-      first_file=`find $data_path -name "*csv" -print -quit`
+      first_file=`find $data_path -maxdepth 1 -name "*csv" -print -quit`
       first_line=$(head -n 1 $first_file)
       #echo "first file: $first_file"
       #echo "first line: $first_line"
@@ -54,7 +54,7 @@ for database in `ls $DATA_DIR` ; do
         #echo "$column"
       done
 
-      files=`find $data_path -name "*csv"`
+      files=`find $data_path -maxdepth 1 -name "*csv"`
       #echo "files: $files"
 
       pattern=""
