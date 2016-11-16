@@ -100,6 +100,6 @@ $(GLOG):
 	fi; 
 	
 clean: 
-	rm -rf lib/
+	#rm -rf lib/
 	rm -rf $(SRC_PATH)/*.o
 	rm -rf $(OUTPUT)
