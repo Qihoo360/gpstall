@@ -3,13 +3,18 @@ LFLAGS = -Wl,-rpath=$(RPATH)
 
 UNAME := $(shell if [ -f "/etc/redhat-release" ]; then echo "CentOS"; else echo "Ubuntu"; fi)
 
+ifeq ($(UNAME), CentOS)
 OSVERSION := $(shell cat /etc/redhat-release | cut -d "." -f 1 | awk '{print $$NF}')
+endif
 
 ifeq ($(UNAME), Ubuntu)
+  $(shell mkdir -p $(CURDIR)/lib/ubuntu)
   SO_PATH = $(CURDIR)/lib/ubuntu
 else ifeq ($(OSVERSION), 5)
+  $(shell mkdir -p $(CURDIR)/lib/5.4)
   SO_PATH = $(CURDIR)/lib/5.4
 else
+  $(shell mkdir -p $(CURDIR)/lib/6.2)
   SO_PATH = $(CURDIR)/lib/6.2
 endif
 
@@ -91,9 +96,10 @@ $(GLOG):
 	#if [ -d $(THIRD_PATH)/glog/.libs ]; then 
 	if [ ! -f $(GLOG) ]; then \
 		cd $(THIRD_PATH)/glog; \
-		autoreconf -ivf; ./configure; make; echo '*' > $(CURPATH)/third/glog/.gitignore; cp $(CURPATH)/third/glog/.libs/libglog.so.0 $(SO_PATH); \
+		autoreconf -ivf; ./configure; make; echo '*' > $(CURDIR)/third/glog/.gitignore; cp $(CURDIR)/third/glog/.libs/libglog.so.0 $(SO_PATH); \
 	fi; 
 	
 clean: 
+	rm -rf lib/
 	rm -rf $(SRC_PATH)/*.o
 	rm -rf $(OUTPUT)
