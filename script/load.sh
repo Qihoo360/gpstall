@@ -80,6 +80,7 @@ for database in `ls $DATA_DIR` ; do
       fi
 
       gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
+      echo '------------------------------' >> $LOG_DIR/gpload.log
       if [ $? -eq 0 ] ; then
         for file in $files ; do
           #echo " OK! we rm csv    -  - " $file
