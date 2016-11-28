@@ -81,21 +81,27 @@ for database in `ls $DATA_DIR` ; do
 
       echo '------------------------------' >> $LOG_DIR/gpload.log
       gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
-      if [ $? -eq 0 ] ; then
+      retv=$?
+      if [ $retv -eq 0 ] ; then
         for file in $files ; do
           #echo " OK! we rm csv    -  - " $file
           # we rm successful csv
           rm -f $file
         done
 
-      else 
+      elif [ $retv -eq 2 ] ; then
         failed_path=${data_path}/failed/
         mkdir -p $failed_path
-        for file in $files ; do
-          #echo " Failed! we mv csv -  - " $file
-          # we mv failed csv
-          mv $file $failed_path/
-        done
+
+        csvfile=$(tail -n 12 $LOG_DIR/gpload.log | grep "error file" | cut -c 38-)
+        errlineno=$(tail -n 12 $LOG_DIR/gpload.log | grep "error line" | cut -c 38-)
+        filename=${data_path}/${csvfile}
+        failname=${failed_path}/${csvfile}_${errlineno}
+
+        echo "Failed! file_name: "$filename
+        echo "Failed! err_line_no: "$errlineno
+        echo "Failed! we mv csv -  - " $failname
+        mv $filename $failname
       fi
 
       #rm -f $TMP_CONF 
