@@ -96,12 +96,17 @@ for database in `ls $DATA_DIR` ; do
         csvfile=$(tail -n 12 $LOG_DIR/gpload.log | grep "error file" | cut -c 38-)
         errlineno=$(tail -n 12 $LOG_DIR/gpload.log | grep "error line" | cut -c 38-)
         filename=${data_path}/${csvfile}
-        failname=${failed_path}/${csvfile}_${errlineno}
-
-        echo "Failed! file_name: "$filename
-        echo "Failed! err_line_no: "$errlineno
-        echo "Failed! we mv csv -  - " $failname
-        mv $filename $failname
+        if [ "$errlineno" = "" ]; then
+          for file in $files ; do
+            mv $file $failed_path
+          done
+        else
+          failname=${failed_path}/${csvfile}_${errlineno}
+          echo "Failed! file_name: "$filename
+          echo "Failed! err_line_no: "$errlineno
+          echo "Failed! we mv csv -  - " $failname
+          mv $filename $failname
+        fi
       fi
 
       #rm -f $TMP_CONF 
