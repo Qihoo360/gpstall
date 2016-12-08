@@ -75,6 +75,7 @@ all: $(BIN)
 	mv $(BIN) $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/load.sh $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/gpload.yaml.ori $(OUTPUT)/bin/
+	cp $(SCRIPT_PATH)/gpload.py $(OUTPUT)/bin/
 	#cp $(SCRIPT_PATH)/* $(OUTPUT)/bin/
 	#mkdir $(OUTPUT)/tools
 	@echo "Success, go, go, go..."
