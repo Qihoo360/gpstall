@@ -49,11 +49,14 @@ static void PSSignalSetup() {
 static void close_std() {
   int fd;
   if ((fd = open("/dev/null", O_RDWR, 0)) != -1) {
-      dup2(fd, STDIN_FILENO);
-      dup2(fd, STDOUT_FILENO);
-      dup2(fd, STDERR_FILENO);
-      close(fd);
-    }
+    dup2(fd, STDIN_FILENO);
+    dup2(fd, STDOUT_FILENO);
+    close(fd);
+  }
+  if ((fd = open("logs/error_logs", O_CREAT | O_RDWR, 0660)) != -1) {
+    dup2(fd, STDERR_FILENO);
+    close(fd);
+  }
 }
 
 static int daemonize() {
@@ -78,6 +81,10 @@ static int daemonize() {
     LOG(FATAL) << "can't create pid file" << std::endl;
     return -1;
   }
+
+  // Don't print log to stderr
+  // becase some error info maybe print to stderr in daemon mode
+  FLAGS_alsologtostderr = false;
 
   return 0;
 }

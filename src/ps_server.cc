@@ -17,8 +17,6 @@ PSServer::PSServer(const PSOptions& options)
     }
 
     ps_dispatch_thread_ = new PSDispatchThread(options_.local_port, worker_num_, ps_worker_thread_, kDispatchCronInterval);
-    // TODO rm
-    //LOG(INFO) << "local_host " << options_.local_ip << ":" << options.local_port;
     DLOG(INFO) << "PSServer cstor";
   }
 
