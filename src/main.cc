@@ -93,10 +93,23 @@ int main(int argc, char** argv) {
   PSOptions options;
   ParseArgs(argc, argv, options);
 
+  // Change work directory
+  char buf[1024] = {0};
+  if (readlink("/proc/self/exe", buf, 1024) == -1) {
+    std::cerr << "Readlink error (" << strerror(errno) << "), path is " << buf << std::endl;
+  }
+  std::string bin_path(buf);
+  size_t pos = bin_path.find_last_of('/');
+  size_t pos2 = bin_path.substr(0, pos).find_last_of('/');
+  std::string work_path = bin_path.substr(0, pos2);
+  if (chdir(work_path.c_str()) == -1) {
+    std::cerr << "Chdir error (" << strerror(errno) << "), path is " << work_path << std::endl;
+  }
+
   GlogInit(options);
 
   if (options.daemon_mode) {
-    std::cout << "Running in daemon mode." << std::endl;
+    std::cout << "Pid: "<< getpid() << " running in daemon mode." << std::endl;
     if (daemonize() != 0)
       return -1;
   }

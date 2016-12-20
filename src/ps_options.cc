@@ -34,12 +34,9 @@ PSOptions::PSOptions()
     log_path.append(1, '/');
   }
 
-  char path[1024];
   char dest[1024];
-  pid_t pid = getpid();
-  sprintf(path, "/proc/%d/exe", pid);
-  if (readlink(path, dest, 1024) == -1) {
-    LOG(ERROR) << "Readlink error (" << strerror(errno) << "), path is " << path;
+  if (readlink("/proc/self/exe", dest, 1024) == -1) {
+    LOG(ERROR) << "Readlink error (" << strerror(errno) << "), path is " << "/proc/self/exe";
   }
   conf_script = dest;
   size_t pos = conf_script.find_last_of('/');

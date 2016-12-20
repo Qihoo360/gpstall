@@ -182,13 +182,17 @@ void PSServer::CollectGploadErrInfo(int ret) {
 
   char line[TMP_BUF_SIZE] = {0};
   std::string latest_failed_file = options_.log_path + "/latest_failed_file";
+  failed_files_name.clear();
   if (slash::FileExists(latest_failed_file)) {
     slash::SequentialFile *sequential_file;
     slash::NewSequentialFile(latest_failed_file, &sequential_file);
 
-    while (sequential_file->ReadLine(line, TMP_BUF_SIZE) != NULL) {
+    char *ret = NULL;
+    do {
+      memset(line, 0, TMP_BUF_SIZE);
+      ret = sequential_file->ReadLine(line, TMP_BUF_SIZE);
       failed_files_name.append(line);
-    }
+    } while (ret != NULL);
 
     delete sequential_file;
   }

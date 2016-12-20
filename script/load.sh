@@ -92,7 +92,7 @@ for database in `ls $DATA_DIR` ; do
 
       elif [ $retv -eq 2 ] ; then
         load_ret=2
-        echo '' > ${LOG_DIR}/latest_failed_file
+        rm -f ${LOG_DIR}/latest_failed_file
         failed_path=${data_path}/failed/
         mkdir -p $failed_path
 
@@ -102,7 +102,9 @@ for database in `ls $DATA_DIR` ; do
         if [ "$errlineno" = "" ]; then
           for file in $files ; do
             mv $file $failed_path
-            echo $file >> ${LOG_DIR}/latest_failed_file
+          done
+          for f in $(ls $failed_path); do
+            echo ${failed_path}/${f} >> ${LOG_DIR}/latest_failed_file
           done
         else
           failname=${failed_path}/${csvfile}_${errlineno}
