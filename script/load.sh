@@ -26,6 +26,7 @@ echo "  error_limit :  $ERROR_LIMIT"
 echo "--------------------------------"
 echo ""
 
+load_ret=0
 export PGPASSWORD=$PASSWD
 #echo "env: "
 #printenv 
@@ -90,6 +91,8 @@ for database in `ls $DATA_DIR` ; do
         done
 
       elif [ $retv -eq 2 ] ; then
+        load_ret=2
+        echo '' > ${LOG_DIR}/latest_failed_file
         failed_path=${data_path}/failed/
         mkdir -p $failed_path
 
@@ -99,6 +102,7 @@ for database in `ls $DATA_DIR` ; do
         if [ "$errlineno" = "" ]; then
           for file in $files ; do
             mv $file $failed_path
+            echo $file >> ${LOG_DIR}/latest_failed_file
           done
         else
           failname=${failed_path}/${csvfile}_${errlineno}
@@ -106,6 +110,7 @@ for database in `ls $DATA_DIR` ; do
           echo "Failed! err_line_no: "$errlineno
           echo "Failed! we mv csv -  - " $failname
           mv $filename $failname
+          echo $failname > ${LOG_DIR}/latest_failed_file
         fi
       fi
 
@@ -118,3 +123,4 @@ done
 echo "--------------------------------"
 echo "  finished at :  `date '+%Y-%m-%d %H:%M:%S'`"
 echo "--------------------------------"
+exit $load_ret

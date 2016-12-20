@@ -1,13 +1,29 @@
-#include "ps_server.h"
-
+#include "env.h"
 #include <glog/logging.h>
 
+#include <fstream>
+
+#include "ps_server.h"
+#include "ps_monitor_thread.h"
 #include "ps_worker_thread.h"
 #include "ps_dispatch_thread.h"
 
+const int TMP_BUF_SIZE = 256;
+
 PSServer::PSServer(const PSOptions& options)
-  : options_(options),
-  should_exit_(false) {
+  : gpload_failed_num(0),
+    latest_failed_time(""),
+    failed_files_num(0),
+    failed_files_name(""),
+    failed_files_size(0),
+    gpload_longest_timeused(0),
+    gpload_latest_timeused(0),
+    gpload_average_timeused(0),
+    options_(options),
+    is_stall_(false),
+    gpload_total_timeused_(0),
+    gpload_counts_(0),
+    should_exit_(false) {
 
     options_.Dump();
     // Create thread
@@ -17,6 +33,9 @@ PSServer::PSServer(const PSOptions& options)
     }
 
     ps_dispatch_thread_ = new PSDispatchThread(options_.local_port, worker_num_, ps_worker_thread_, kDispatchCronInterval);
+
+		ps_monitor_thread_ = new PSMonitorThread(options_.monitor_port, ps_dispatch_thread_);
+
     DLOG(INFO) << "PSServer cstor";
   }
 
@@ -27,12 +46,14 @@ PSServer::~PSServer() {
   for (int i = 0; i < worker_num_; i++) {
     delete ps_worker_thread_[i];
   }
+  delete ps_monitor_thread_;
 
   //slash::MutexLock l(&mutex_files_); 
   std::unordered_map<std::string, Logger *>::iterator it = files_.begin();
   for (; it != files_.end(); it++) {
     delete it->second;
   }
+
   LOG(INFO) << "PSServerThread " << pthread_self() << " exit!!!";
 }
 
@@ -42,9 +63,10 @@ static int GCD(int a, int b) {
 
 Status PSServer::Start() {
   ps_dispatch_thread_->StartThread();
-
-  // TEST 
   LOG(INFO) << "PSServer started on port:" <<  options_.local_port;
+
+	ps_monitor_thread_->StartThread();
+  LOG(INFO) << "PSMonitor started on port:" <<  options_.monitor_port;
 
   int gcd = GCD(options_.load_interval, options_.flush_interval);
   uint64_t common_check_interval = (uint64_t)options_.load_interval / gcd * options_.flush_interval;
@@ -99,7 +121,6 @@ void PSServer::MaybeFlushLog() {
 }
 
 void PSServer::DoTimingTask() {
-  // std::string cmd = "flock -xn /tmp/gpstall.lock -c \"sh " + options_.load_script + " " + options_.data_path + " " + options_.conf_script + "\"";
   const char *cmd_format = "flock -xn /tmp/gpstall.lock -c \"sh %s %s %s %s %s %s %s %d %s %d %d\"";
   char cmd[2048] = {0};
   sprintf(cmd, cmd_format, options_.load_script.c_str(), options_.data_path.c_str(), options_.log_path.c_str(),
@@ -109,9 +130,66 @@ void PSServer::DoTimingTask() {
 
   DLOG(INFO) << "Cron Load: " << cmd;
 
-  int ret = system(cmd);
-  DLOG(INFO) << "Cron return: " << ret;
-  if (WIFSIGNALED(ret) && (WTERMSIG(ret) == SIGINT || WTERMSIG(ret) == SIGQUIT)) {
+  int ret = 0;
+  {
+    CalcExecTime t(&gpload_latest_timeused);
+    set_is_stall(true);
+    ret = system(cmd);
+    set_is_stall(false);
+  }
+  CollectGploadErrInfo(ret);
+}
+
+void PSServer::CollectGploadErrInfo(int ret) {
+  if (WIFSIGNALED(ret) && (WTERMSIG(ret) == SIGINT || WTERMSIG(ret) == SIGQUIT))
     Exit();
+  int load_ret = WEXITSTATUS(ret);
+  DLOG(INFO) << "Cron return: " << load_ret;
+  DLOG(INFO) << "timeused: " << gpload_latest_timeused;
+
+  if (load_ret != 0) {
+    // gpload error occured
+    gpload_failed_num += 1;
+    time_t now;
+    time(&now);
+    latest_failed_time.assign(ctime(&now));
+    latest_failed_time.resize(latest_failed_time.size() - 1);
+  }
+
+  // gpload timeuesd statistics
+  // avoid empty gpload timeused
+  if (gpload_latest_timeused > 20) {
+    gpload_counts_ += 1;
+    gpload_total_timeused_ += gpload_latest_timeused;
+    gpload_longest_timeused = std::max(gpload_longest_timeused,
+                                  gpload_latest_timeused);
+    gpload_average_timeused = gpload_total_timeused_ / gpload_counts_;
+  }
+
+  // gpload failed files info
+  // failed_files_num, failed_file_name, failed_files_size
+  failed_files_size = 0;
+  failed_files_num = 0;
+  std::vector<std::string> files;
+  slash::GetDescendant(options_.data_path, files);
+  for (auto iter = files.begin(); iter != files.end(); iter++) {
+    if (iter->find("failed") != std::string::npos) {
+      failed_files_num += 1;
+      std::ifstream f(*iter, std::ios::binary | std::ios::ate);
+      failed_files_size += static_cast<uint64_t>(f.tellg());
+    }
+  }
+
+  char line[TMP_BUF_SIZE] = {0};
+  std::string latest_failed_file = options_.log_path + "/latest_failed_file";
+  if (slash::FileExists(latest_failed_file)) {
+    slash::SequentialFile *sequential_file;
+    slash::NewSequentialFile(latest_failed_file, &sequential_file);
+
+    while (sequential_file->ReadLine(line, TMP_BUF_SIZE) != NULL) {
+      failed_files_name.append(line);
+    }
+
+    delete sequential_file;
   }
 }

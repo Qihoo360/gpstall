@@ -8,6 +8,7 @@
 const std::string LOCAL_IP = "local_ip";
 const std::string LOCAL_PORT = "local_port";
 const std::string WORKER_NUM = "worker_num";
+const std::string MONITOR_PORT = "monitor_port";
 const std::string FILE_SIZE = "file_size";
 const std::string LOAD_INTERVAL = "load_interval";
 const std::string FLUSH_INTERVAL = "flush_interval";
@@ -31,34 +32,10 @@ const std::string GPD_HOST = "gpd_host";
 const std::string GPD_PORT= "gpd_port";
 const std::string ERROR_LIMIT = "error_limit";
 
-class Server;
-struct PSOptions;
-
-class Server {
- public:
-  std::string ip;
-  int port;
-
-  // colon separated ip:port
-  Server(const std::string& str);
-  Server(const std::string& _ip, const int& _port) : ip(_ip), port(_port) {}
-
-  Server(const Server& server)
-      : ip(server.ip),
-      port(server.port) {}
-
-  Server& operator=(const Server& server) {
-    ip = server.ip;
-    port = server.port;
-    return *this;
-  }
-
- private:
-};
-
 struct PSOptions {
   std::string local_ip;
   int local_port;
+  int monitor_port;
 
   int worker_num;
   int file_size;
@@ -87,11 +64,10 @@ struct PSOptions {
   int gpd_port;
   int error_limit;
   
-  //std::vector<Server> servers;
-
   PSOptions();
-
   PSOptions(const PSOptions& options);
+
+  int GetOptionFromFile(const std::string &configuration_file);
 
   void Dump();
 };

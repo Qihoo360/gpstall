@@ -91,7 +91,6 @@ static int daemonize() {
 
 int main(int argc, char** argv) {
   PSOptions options;
-
   ParseArgs(argc, argv, options);
 
   GlogInit(options);
@@ -106,7 +105,6 @@ int main(int argc, char** argv) {
   ps_server = new PSServer(options);
   ps_server->Start();
 
-  //printf ("Exit\n");
   delete ps_server;
 
   ::google::ShutdownGoogleLogging();
@@ -119,40 +117,6 @@ void Usage() {
           "    -h            -- show this help\n"
           "    -c conf/file  -- config file\n"
           );
-}
-
-int GetOptionFromFile(const std::string &configuration_file, PSOptions& options) {
-  slash::BaseConf b(configuration_file);
-  if (b.LoadConf() != 0)
-    return -1;
-
-  // gpstall conf
-  b.GetConfStr(LOCAL_IP, &options.local_ip);
-  b.GetConfInt(LOCAL_PORT, &options.local_port);
-  b.GetConfInt(WORKER_NUM, &options.worker_num);
-  b.GetConfInt(FILE_SIZE, &options.file_size);
-  b.GetConfInt(LOAD_INTERVAL, &options.load_interval);
-  b.GetConfInt(FLUSH_INTERVAL, &options.flush_interval);
-  // TODO timeout
-  b.GetConfStr(DATA_PATH, &options.data_path);
-  b.GetConfStr(LOG_PATH, &options.log_path);
-  b.GetConfInt(MINLOGLEVEL, &options.minloglevel);
-  b.GetConfInt(MAXLOGSIZE, &options.maxlogsize);
-  b.GetConfStr(LOAD_SCRIPT, &options.load_script);
-  b.GetConfStr(CONF_SCRIPT, &options.conf_script);
-  b.GetConfBool(DAEMON_MODE, &options.daemon_mode);
-
-  // greenplum conf
-  b.GetConfStr(GP_USER, &options.gp_user);
-  b.GetConfStr(PASSWD, &options.passwd);
-  b.GetConfStr(GP_HOST, &options.gp_host);
-  b.GetConfInt(GP_PORT, &options.gp_port);
-
-  // gpfdist conf
-  b.GetConfStr(GPD_HOST, &options.gpd_host);
-  b.GetConfInt(GPD_PORT, &options.gpd_port);
-  b.GetConfInt(ERROR_LIMIT, &options.error_limit);
-  return 0;
 }
 
 void ParseArgs(int argc, char* argv[], PSOptions& options) {
@@ -176,7 +140,7 @@ void ParseArgs(int argc, char* argv[], PSOptions& options) {
         options.daemon_mode = true;
         break;
       case 'c':
-        if (GetOptionFromFile(optarg, options) != 0) {
+        if (options.GetOptionFromFile(optarg) != 0) {
           Usage();
           exit(-1);
         }

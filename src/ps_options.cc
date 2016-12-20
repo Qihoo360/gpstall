@@ -1,14 +1,16 @@
-#include "ps_options.h"
+#include "base_conf.h"
 
 #include <unistd.h>
 #include <glog/logging.h>
 
 #include "ps_consts.h"
+#include "ps_options.h"
 
 ////// PSOptions //////
 PSOptions::PSOptions()
   : local_ip("127.0.0.1"),
     local_port(8001),
+    monitor_port(18001),
     worker_num(8),
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
@@ -53,6 +55,7 @@ PSOptions::PSOptions()
 PSOptions::PSOptions(const PSOptions& options)
   : local_ip(options.local_ip),
     local_port(options.local_port),
+    monitor_port(options.monitor_port),
     worker_num(options.worker_num),
     file_size(options.file_size),
     load_interval(options.load_interval),
@@ -103,6 +106,7 @@ void PSOptions::Dump() {
   }
   LOG(INFO) << "    Options.local_ip      : " << local_ip;
   LOG(INFO) << "    Options.local_port    : " << local_port;
+  LOG(INFO) << "    Options.monitor_port  : " << monitor_port;
   LOG(INFO) << "    Options.data_path     : " << data_path;
   LOG(INFO) << "    Options.log_path      : " << log_path;
   LOG(INFO) << "    Options.worker_num    : " << worker_num;
@@ -119,4 +123,39 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.gpd_port      : " << gpd_port;
   LOG(INFO) << "    Options.error_limit   : " << error_limit;
   DLOG(INFO) << "    Options.passwd        : " << passwd;
+}
+
+int PSOptions::GetOptionFromFile(const std::string &configuration_file) {
+  slash::BaseConf b(configuration_file);
+  if (b.LoadConf() != 0)
+    return -1;
+
+  // gpstall conf
+  b.GetConfStr(LOCAL_IP, &local_ip);
+  b.GetConfInt(LOCAL_PORT, &local_port);
+  b.GetConfInt(MONITOR_PORT, &monitor_port);
+  b.GetConfInt(WORKER_NUM, &worker_num);
+  b.GetConfInt(FILE_SIZE, &file_size);
+  b.GetConfInt(LOAD_INTERVAL, &load_interval);
+  b.GetConfInt(FLUSH_INTERVAL, &flush_interval);
+  // TODO timeout
+  b.GetConfStr(DATA_PATH, &data_path);
+  b.GetConfStr(LOG_PATH, &log_path);
+  b.GetConfInt(MINLOGLEVEL, &minloglevel);
+  b.GetConfInt(MAXLOGSIZE, &maxlogsize);
+  b.GetConfStr(LOAD_SCRIPT, &load_script);
+  b.GetConfStr(CONF_SCRIPT, &conf_script);
+  b.GetConfBool(DAEMON_MODE, &daemon_mode);
+
+  // greenplum conf
+  b.GetConfStr(GP_USER, &gp_user);
+  b.GetConfStr(PASSWD, &passwd);
+  b.GetConfStr(GP_HOST, &gp_host);
+  b.GetConfInt(GP_PORT, &gp_port);
+
+  // gpfdist conf
+  b.GetConfStr(GPD_HOST, &gpd_host);
+  b.GetConfInt(GPD_PORT, &gpd_port);
+  b.GetConfInt(ERROR_LIMIT, &error_limit);
+  return 0;
 }

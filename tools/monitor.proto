@@ -1,0 +1,28 @@
+package gpstall;
+
+message Command {
+  required string command = 1 [default = "error"];
+}
+
+message ServiceStatus {
+  // gpstall status
+  enum Status {
+    ONLINE = 0;
+    STALL = 1;
+    UNKNOW = 2;
+  }
+  required string start_time = 1;
+  required Status service_status = 2 [default = UNKNOW];
+  required int32 conn_num = 3;
+  required int32 qps = 4;
+
+  // gpload status
+  required int32 gpload_failed_num = 5;
+  required string lastest_failed_time = 6;
+  required int32 failed_files_num = 7;
+  required string failed_files_name = 8;
+  required int32 failed_files_size = 9;
+  required int32 gpload_longest_timeused = 10;
+  required int32 gpload_latest_timeused = 11;
+  required int32 gpload_average_timeused = 12;
+}

@@ -13,6 +13,7 @@ class PSDispatchThread : public pink::DispatchThread<PSClientConn> {
   virtual void CronHandle();
 
   int ClientNum();
+  uint64_t Qps();
 
  private:
 };

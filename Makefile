@@ -40,6 +40,7 @@ BIN = gpstall
 
 
 INCLUDE_PATH = -I./include/ \
+							 -I./src/ \
 							 -I$(THIRD_PATH)/glog/src/ \
 							 -I$(THIRD_PATH)/slash/output/include/ \
 							 -I$(THIRD_PATH)/pink/output/ \
@@ -55,6 +56,7 @@ LIB_PATH = -L./ \
 LIBS = -lpthread \
 	   -lglog \
 	   -lslash \
+	   -lprotobuf \
 		 -lpink
 
 GLOG = $(THIRD_PATH)/glog/.libs/libglog.so.0
