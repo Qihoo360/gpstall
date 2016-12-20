@@ -31,6 +31,7 @@ SRC_PATH = ./src/
 THIRD_PATH = ./third
 SCRIPT_PATH = ./script
 OUTPUT = ./output
+TOOLS = ./tools
 
 
 SRC = $(wildcard $(SRC_PATH)/*.cc)
@@ -78,8 +79,8 @@ all: $(BIN)
 	cp $(SCRIPT_PATH)/load.sh $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/gpload.yaml.ori $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/gpload.py $(OUTPUT)/bin/
-	#cp $(SCRIPT_PATH)/* $(OUTPUT)/bin/
-	#mkdir $(OUTPUT)/tools
+	make -C $(TOOLS)
+	cp $(TOOLS)/stall_status $(OUTPUT)/bin/
 	@echo "Success, go, go, go..."
 
 
@@ -106,3 +107,4 @@ clean:
 	#rm -rf lib/
 	rm -rf $(SRC_PATH)/*.o
 	rm -rf $(OUTPUT)
+	rm -rf $(TOOLS)/stall_status
