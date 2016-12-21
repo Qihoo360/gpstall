@@ -58,11 +58,8 @@ for database in `ls $DATA_DIR` ; do
       files=`find $data_path -maxdepth 1 -name "*csv"`
       #echo "files: $files"
 
-      pattern=""
-      for file in $files ; do
-        pattern+="\\n          - ${file}"
-      done
-      #echo "pattern: ${pattern}"
+      pattern+="\\n          - ${data_path}/*.csv"
+      echo "pattern: ${pattern}"
 
       cp -f $ORI_CONF $TMP_CONF
       sed -i "s|{DATABASE}|${database}|g" $TMP_CONF

@@ -46,17 +46,15 @@ static void PSSignalSetup() {
   signal(SIGTERM, &IntSigHandle);
 }
 
-static void close_std() {
+static int close_std() {
   int fd;
   if ((fd = open("/dev/null", O_RDWR, 0)) != -1) {
     dup2(fd, STDIN_FILENO);
     dup2(fd, STDOUT_FILENO);
-    close(fd);
-  }
-  if ((fd = open("logs/error_logs", O_CREAT | O_RDWR, 0660)) != -1) {
     dup2(fd, STDERR_FILENO);
     close(fd);
-  }
+  } else return fd;
+  return 0;
 }
 
 static int daemonize() {
@@ -70,7 +68,10 @@ static int daemonize() {
     exit(0);
   setsid();
 
-  close_std();
+  if (close_std() != 0) {
+    LOG(FATAL) << "can't close std" << std::endl;
+    return -1;
+  }
 
   // create pid file
   FILE *fp = fopen(kPidFile.c_str(), "w");
@@ -110,8 +111,10 @@ int main(int argc, char** argv) {
 
   if (options.daemon_mode) {
     std::cout << "Pid: "<< getpid() << " running in daemon mode." << std::endl;
-    if (daemonize() != 0)
+    if (daemonize() != 0) {
+      std::cout << "Daemon mode failed." << std::endl;
       return -1;
+    }
   }
   PSSignalSetup();
 
