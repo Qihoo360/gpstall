@@ -31,13 +31,16 @@ SRC_PATH = ./src/
 THIRD_PATH = ./third
 SCRIPT_PATH = ./script
 OUTPUT = ./output
-TOOLS = ./tools
+TOOLS_PATH = ./tools
 
 
 SRC = $(wildcard $(SRC_PATH)/*.cc)
+TOOLS_SRC = $(wildcard $(TOOLS_PATH)/*.cc)
 OBJS = $(patsubst %.cc,%.o,$(SRC))
+TOOLS_OBJS = $(patsubst %.cc,%.o,$(TOOLS_SRC))
 
 BIN = gpstall 
+TOOLS_BIN = stall_status
 
 
 INCLUDE_PATH = -I./include/ \
@@ -67,7 +70,7 @@ SLASH = $(THIRD_PATH)/slash/output/lib/libslash.a
 .PHONY: all clean
 
 
-all: $(BIN)
+all: $(BIN) $(TOOLS_BIN)
 	@echo "OBJS: $(OBJS)"
 	rm -rf $(OUTPUT)
 	mkdir $(OUTPUT)
@@ -76,11 +79,10 @@ all: $(BIN)
 	mkdir $(OUTPUT)/lib
 	cp -r $(SO_PATH)/*  $(OUTPUT)/lib
 	mv $(BIN) $(OUTPUT)/bin/
+	mv $(TOOLS_BIN) $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/load.sh $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/gpload.yaml.ori $(OUTPUT)/bin/
 	cp $(SCRIPT_PATH)/gpload.py $(OUTPUT)/bin/
-	make -C $(TOOLS)
-	cp $(TOOLS)/stall_status $(OUTPUT)/bin/
 	@echo "Success, go, go, go..."
 
 
@@ -89,6 +91,12 @@ $(BIN): $(GLOG) $(PINK) $(SLASH) $(OBJS)
 
 $(OBJS): %.o : %.cc
 	$(CXX) $(CXXFLAGS) $(INCLUDE_PATH) -c $< -o $@  
+
+$(TOOLS_BIN): $(PINK) $(SLASH) $(TOOLS_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(TOOLS_OBJS) $(INCLUDE_PATH) $(LIB_PATH) $(LFLAGS) $(LIBS)
+
+$(TOOLS_OBJS): %.o : %.cc
+	$(CXX) $(CXXFLAGS) $(INCLUDE_PATH) -c $< -o $@
 
 $(SLASH):
 	make -C $(THIRD_PATH)/slash/
@@ -104,7 +112,6 @@ $(GLOG):
 	fi; 
 	
 clean: 
-	#rm -rf lib/
 	rm -rf $(SRC_PATH)/*.o
 	rm -rf $(OUTPUT)
-	rm -rf $(TOOLS)/stall_status
+	rm -rf $(TOOLS_PATH)/*.o
