@@ -29,7 +29,7 @@ const std::string GP_USER = "gp_user";
 const std::string GP_HOST = "gp_host";
 const std::string GP_PORT = "gp_port";
 const std::string GPD_HOST = "gpd_host";
-const std::string GPD_PORT= "gpd_port";
+const std::string GPD_PORT= "gpd_port_range";
 const std::string ERROR_LIMIT = "error_limit";
 
 struct PSOptions {
@@ -61,7 +61,7 @@ struct PSOptions {
 
   // gpfdist conf
   std::string gpd_host;
-  int gpd_port;
+  std::string gpd_port_range;
   int error_limit;
   
   PSOptions();

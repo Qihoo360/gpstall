@@ -7,7 +7,7 @@ PASSWD=$5
 GP_HOST=$6
 GP_PORT=$7
 GPD_HOST=$8
-GPD_PORT=$9
+GPD_PORT_RANGE=$9
 ERROR_LIMIT=${10}
 TMP_CONF=${11:-/tmp/gpload.yaml.tmp}
 
@@ -20,7 +20,7 @@ echo "  gp_host     :  $GP_HOST"
 echo "  gp_user     :  $GP_USER"
 echo "  gp_port     :  $GP_PORT"
 echo "  gpdist_host :  $GPD_HOST"
-echo "  gpdist_port :  $GPD_PORT"
+echo "  gpdist_port_range :  $GPD_PORT_RANGE"
 echo "  error_limit :  $ERROR_LIMIT"
 #echo "  passwd      :  $PASSWD"
 echo "--------------------------------"
@@ -70,7 +70,7 @@ for database in `ls $DATA_DIR` ; do
       sed -i "s|{GPHOST}|${GP_HOST}|g" $TMP_CONF
       sed -i "s|{GPPORT}|${GP_PORT}|g" $TMP_CONF
       sed -i "s|{GPDHOST}|${GPD_HOST}|g" $TMP_CONF
-      sed -i "s|{GPDPORT}|${GPD_PORT}|g" $TMP_CONF
+      sed -i "s|{GPDPORT_RANGE}|${GPD_PORT_RANGE}|g" $TMP_CONF
       sed -i "s|{ERROR_LIMIT}|${ERROR_LIMIT}|g" $TMP_CONF
 
       if [ ! -d $LOG_DIR ] ; then

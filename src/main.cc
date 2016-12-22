@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
   GlogInit(options);
 
   if (options.daemon_mode) {
-    std::cout << "Pid: "<< getpid() << " running in daemon mode." << std::endl;
+    std::cout << "Will running in daemon mode." << std::endl;
     if (daemonize() != 0) {
       std::cout << "Daemon mode failed." << std::endl;
       return -1;

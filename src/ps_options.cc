@@ -25,7 +25,7 @@ PSOptions::PSOptions()
     gp_host("127.0.0.1"),
     gp_port(15432),
     gpd_host("127.0.0.1"),
-    gpd_port(8081),
+    gpd_port_range("[8081,8082]"),
     error_limit(50000) {
   if (data_path.back() != '/') {
     data_path.append(1, '/');
@@ -69,7 +69,7 @@ PSOptions::PSOptions(const PSOptions& options)
     gp_host(options.gp_host),
     gp_port(options.gp_port),
     gpd_host(options.gpd_host),
-    gpd_port(options.gpd_port),
+    gpd_port_range(options.gpd_port_range),
     error_limit(options.error_limit) {
   if (data_path.back() != '/') {
     data_path.append(1, '/');
@@ -117,7 +117,7 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.gp_host       : " << gp_host;
   LOG(INFO) << "    Options.gp_port       : " << gp_port;
   LOG(INFO) << "    Options.gpd_host      : " << gpd_host;
-  LOG(INFO) << "    Options.gpd_port      : " << gpd_port;
+  LOG(INFO) << "    Options.gpd_port_range      : " << gpd_port_range;
   LOG(INFO) << "    Options.error_limit   : " << error_limit;
   DLOG(INFO) << "    Options.passwd        : " << passwd;
 }
@@ -152,7 +152,7 @@ int PSOptions::GetOptionFromFile(const std::string &configuration_file) {
 
   // gpfdist conf
   b.GetConfStr(GPD_HOST, &gpd_host);
-  b.GetConfInt(GPD_PORT, &gpd_port);
+  b.GetConfStr(GPD_PORT, &gpd_port_range);
   b.GetConfInt(ERROR_LIMIT, &error_limit);
   return 0;
 }

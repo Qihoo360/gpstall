@@ -10,7 +10,7 @@ GPLOAD:
     - SOURCE:
          LOCAL_HOSTNAME:
            - {GPDHOST}
-         PORT: {GPDPORT}
+         PORT_RANGE: {GPDPORT_RANGE}
          FILE:{FILE}
     - FORMAT: csv
     - QUOTE: '"'

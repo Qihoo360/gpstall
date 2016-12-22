@@ -121,12 +121,20 @@ void PSServer::MaybeFlushLog() {
 }
 
 void PSServer::DoTimingTask() {
-  const char *cmd_format = "flock -xn /tmp/gpstall.lock -c \"sh %s %s %s %s %s %s %s %d %s %d %d\"";
+  const char *cmd_format = "flock -xn /tmp/gpstall.lock -c \"sh %s %s %s %s %s %s %s %d %s \'%s\' %d\"";
   char cmd[2048] = {0};
-  sprintf(cmd, cmd_format, options_.load_script.c_str(), options_.data_path.c_str(), options_.log_path.c_str(),
-                          options_.conf_script.c_str(),
-                          options_.gp_user.c_str(), options_.passwd.c_str(), options_.gp_host.c_str(), options_.gp_port,
-                          options_.gpd_host.c_str(), options_.gpd_port, options_.error_limit);
+  sprintf(cmd, cmd_format,
+          options_.load_script.c_str(),
+          options_.data_path.c_str(),
+          options_.log_path.c_str(),
+          options_.conf_script.c_str(),
+          options_.gp_user.c_str(),
+          options_.passwd.c_str(),
+          options_.gp_host.c_str(),
+          options_.gp_port,
+          options_.gpd_host.c_str(),
+          options_.gpd_port_range.c_str(),
+          options_.error_limit);
 
   DLOG(INFO) << "Cron Load: " << cmd;
 
