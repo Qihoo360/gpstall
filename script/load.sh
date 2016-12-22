@@ -9,7 +9,7 @@ GP_PORT=$7
 GPD_HOST=$8
 GPD_PORT_RANGE=$9
 ERROR_LIMIT=${10}
-TMP_CONF=${11:-/tmp/gpload.yaml.tmp}
+TMP_CONF=/tmp/gpload.yaml.tmp.${11}
 
 echo "================================"
 echo "  start at    :  `date '+%Y-%m-%d %H:%M:%S'` ..."

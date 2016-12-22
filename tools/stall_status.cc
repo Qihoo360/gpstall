@@ -37,7 +37,17 @@ pink::Status Pcli::RecvStatus() {
     return s;
 
   std::cout << "start_time: " << service_status_.start_time() << std::endl;
-  std::cout << "service_status: " << service_status_.service_status() << std::endl;
+  switch (service_status_.service_status()) {
+    case gpstall::ServiceStatus::ONLINE:
+      std::cout << "service_status: ONLINE" << std::endl;
+      break;
+    case gpstall::ServiceStatus::STALL:
+      std::cout << "service_status: STALL" << std::endl;
+      break;
+    case gpstall::ServiceStatus::UNKNOW:
+    default:
+      std::cout << "service_status: UNKNOW" << std::endl;
+  }
   std::cout << "conn_num: " << service_status_.conn_num() << std::endl;
   std::cout << "qps: " << service_status_.qps() << std::endl;
   std::cout << std::endl;
