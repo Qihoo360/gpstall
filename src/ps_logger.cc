@@ -164,7 +164,6 @@ Status Logger::Put(const std::string &item) {
       slash::RWLock(&(version_->rwlock_), true);
       version_->pro_num_ = pro_num_;
       version_->pro_offset_ = 0;
-      version_->StableSave();
 
       if (!header_.empty()) {
         s = queue_->Append(header_);
@@ -173,6 +172,8 @@ Status Logger::Put(const std::string &item) {
         }
         empty_file_ = true;
       }
+
+      version_->StableSave();
     }
   }
 
@@ -180,6 +181,7 @@ Status Logger::Put(const std::string &item) {
   if (s.ok()) {
     slash::RWLock(&(version_->rwlock_), true);
     version_->pro_offset_ += item.size();
+    version_->StableSave();
   }
   empty_file_ = false;
 
@@ -204,7 +206,6 @@ Status Logger::Flush() {
       slash::RWLock(&(version_->rwlock_), true);
       version_->pro_num_ = pro_num_;
       version_->pro_offset_ = 0;
-      version_->StableSave();
 
       if (!header_.empty()) {
         s = queue_->Append(header_);
@@ -213,6 +214,8 @@ Status Logger::Flush() {
         }
         empty_file_ = true;
       }
+
+      version_->StableSave();
     }
     //gettimeofday(&last_action_, NULL);
     return Status::OK();
