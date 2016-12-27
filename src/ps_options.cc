@@ -15,8 +15,8 @@ PSOptions::PSOptions()
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
     flush_interval(kFlushCronInterval),
-    data_path("./data"),
-    log_path("./log"),
+    data_path("./data/"),
+    log_path("./log/"),
     minloglevel(0),
     maxlogsize(1800),
     passwd("passwd"),
@@ -27,13 +27,6 @@ PSOptions::PSOptions()
     gpd_host("127.0.0.1"),
     gpd_port_range("[8081,8082]"),
     error_limit(50000) {
-  if (data_path.back() != '/') {
-    data_path.append(1, '/');
-  }
-  if (log_path.back() != '/') {
-    log_path.append(1, '/');
-  }
-
   char dest[1024];
   if (readlink("/proc/self/exe", dest, 1024) == -1) {
     LOG(ERROR) << "Readlink error (" << strerror(errno) << "), path is " << "/proc/self/exe";
@@ -44,7 +37,6 @@ PSOptions::PSOptions()
     std::string bin_path = conf_script.substr(0, pos);
     conf_script = bin_path + "/gpload.yaml.ori";
     load_script = bin_path + "/load.sh";
-    //conf_script.replace(conf_script.begin() + pos + 1, conf_script.end(), "gpload.yaml.ori");
   }
 }
 
@@ -86,14 +78,6 @@ PSOptions::PSOptions(const PSOptions& options)
 }
 
 void PSOptions::Dump() {
-  //fprintf (stderr, "    Options.local_ip    : %s\n", local_ip.c_str());
-  //fprintf (stderr, "    Options.local_port  : %d\n", local_port);
-  //fprintf (stderr, "    Options.data_path   : %s\n", data_path.c_str());
-  //fprintf (stderr, "    Options.log_path    : %s\n", log_path.c_str());
-  //fprintf (stderr, "    Options.worker_num  : %d\n", worker_num);
-  //fprintf (stderr, "    Options.file_size   : %d Bytes\n", file_size);
-  //fprintf (stderr, "    Options.load_script : %s\n", log_path.c_str());
-
   char cwd[1024];
   char* ret = getcwd(cwd, sizeof(cwd));
   if (!ret) {
@@ -140,8 +124,6 @@ int PSOptions::GetOptionFromFile(const std::string &configuration_file) {
   b.GetConfStr(LOG_PATH, &log_path);
   b.GetConfInt(MINLOGLEVEL, &minloglevel);
   b.GetConfInt(MAXLOGSIZE, &maxlogsize);
-  b.GetConfStr(LOAD_SCRIPT, &load_script);
-  b.GetConfStr(CONF_SCRIPT, &conf_script);
   b.GetConfBool(DAEMON_MODE, &daemon_mode);
 
   // greenplum conf

@@ -14,8 +14,6 @@ const std::string LOAD_INTERVAL = "load_interval";
 const std::string FLUSH_INTERVAL = "flush_interval";
 const std::string TIMEOUT = "timeout";
 const std::string DATA_PATH = "data_path";
-const std::string LOAD_SCRIPT = "load_script";
-const std::string CONF_SCRIPT = "conf_script";
 const std::string DAEMON_MODE = "daemon_mode";
 const std::string PASSWD = "passwd";
 

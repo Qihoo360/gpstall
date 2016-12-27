@@ -46,18 +46,22 @@ static void PSSignalSetup() {
   signal(SIGTERM, &IntSigHandle);
 }
 
-static int close_std() {
+static int close_std(const std::string &errlog) {
   int fd;
   if ((fd = open("/dev/null", O_RDWR, 0)) != -1) {
     dup2(fd, STDIN_FILENO);
     dup2(fd, STDOUT_FILENO);
+    close(fd);
+  } else return fd;
+
+  if ((fd = open(errlog.c_str(), O_CREAT | O_RDWR, 0644)) != -1) {
     dup2(fd, STDERR_FILENO);
     close(fd);
   } else return fd;
   return 0;
 }
 
-static int daemonize() {
+static int daemonize(const PSOptions &options) {
   pid_t pid;
   umask(0);
 
@@ -68,18 +72,9 @@ static int daemonize() {
     exit(0);
   setsid();
 
-  if (close_std() != 0) {
+  std::string errlog = options.log_path + "/error_log";
+  if (close_std(errlog) != 0) {
     LOG(FATAL) << "can't close std" << std::endl;
-    return -1;
-  }
-
-  // create pid file
-  FILE *fp = fopen(kPidFile.c_str(), "w");
-  if (fp) {
-    fprintf(fp, "%d\n", (int)getpid());
-    fclose(fp);
-  } else {
-    LOG(FATAL) << "can't create pid file" << std::endl;
     return -1;
   }
 
@@ -94,24 +89,11 @@ int main(int argc, char** argv) {
   PSOptions options;
   ParseArgs(argc, argv, options);
 
-  // Change work directory
-  char buf[1024] = {0};
-  if (readlink("/proc/self/exe", buf, 1024) == -1) {
-    std::cerr << "Readlink error (" << strerror(errno) << "), path is " << buf << std::endl;
-  }
-  std::string bin_path(buf);
-  size_t pos = bin_path.find_last_of('/');
-  size_t pos2 = bin_path.substr(0, pos).find_last_of('/');
-  std::string work_path = bin_path.substr(0, pos2);
-  if (chdir(work_path.c_str()) == -1) {
-    std::cerr << "Chdir error (" << strerror(errno) << "), path is " << work_path << std::endl;
-  }
-
   GlogInit(options);
 
   if (options.daemon_mode) {
     std::cout << "Will running in daemon mode." << std::endl;
-    if (daemonize() != 0) {
+    if (daemonize(options) != 0) {
       std::cout << "Daemon mode failed." << std::endl;
       return -1;
     }
