@@ -71,7 +71,6 @@ SLASH = $(THIRD_PATH)/slash/output/lib/libslash.a
 
 
 all: $(BIN) $(TOOLS_BIN)
-	@echo "OBJS: $(OBJS)"
 	rm -rf $(OUTPUT)
 	mkdir $(OUTPUT)
 	mkdir $(OUTPUT)/bin

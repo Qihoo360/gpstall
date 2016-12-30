@@ -245,26 +245,26 @@ class ServiceStatus : public ::google::protobuf::Message {
   inline ::gpstall::ServiceStatus_Status service_status() const;
   inline void set_service_status(::gpstall::ServiceStatus_Status value);
 
-  // required int32 conn_num = 3;
+  // required uint32 conn_num = 3;
   inline bool has_conn_num() const;
   inline void clear_conn_num();
   static const int kConnNumFieldNumber = 3;
-  inline ::google::protobuf::int32 conn_num() const;
-  inline void set_conn_num(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint32 conn_num() const;
+  inline void set_conn_num(::google::protobuf::uint32 value);
 
-  // required int32 qps = 4;
+  // required uint32 qps = 4;
   inline bool has_qps() const;
   inline void clear_qps();
   static const int kQpsFieldNumber = 4;
-  inline ::google::protobuf::int32 qps() const;
-  inline void set_qps(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint32 qps() const;
+  inline void set_qps(::google::protobuf::uint32 value);
 
-  // required int32 gpload_failed_num = 5;
+  // required uint32 gpload_failed_num = 5;
   inline bool has_gpload_failed_num() const;
   inline void clear_gpload_failed_num();
   static const int kGploadFailedNumFieldNumber = 5;
-  inline ::google::protobuf::int32 gpload_failed_num() const;
-  inline void set_gpload_failed_num(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint32 gpload_failed_num() const;
+  inline void set_gpload_failed_num(::google::protobuf::uint32 value);
 
   // required string lastest_failed_time = 6;
   inline bool has_lastest_failed_time() const;
@@ -278,12 +278,12 @@ class ServiceStatus : public ::google::protobuf::Message {
   inline ::std::string* release_lastest_failed_time();
   inline void set_allocated_lastest_failed_time(::std::string* lastest_failed_time);
 
-  // required int32 failed_files_num = 7;
+  // required uint32 failed_files_num = 7;
   inline bool has_failed_files_num() const;
   inline void clear_failed_files_num();
   static const int kFailedFilesNumFieldNumber = 7;
-  inline ::google::protobuf::int32 failed_files_num() const;
-  inline void set_failed_files_num(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint32 failed_files_num() const;
+  inline void set_failed_files_num(::google::protobuf::uint32 value);
 
   // required string failed_files_name = 8;
   inline bool has_failed_files_name() const;
@@ -297,33 +297,33 @@ class ServiceStatus : public ::google::protobuf::Message {
   inline ::std::string* release_failed_files_name();
   inline void set_allocated_failed_files_name(::std::string* failed_files_name);
 
-  // required int32 failed_files_size = 9;
+  // required uint64 failed_files_size = 9;
   inline bool has_failed_files_size() const;
   inline void clear_failed_files_size();
   static const int kFailedFilesSizeFieldNumber = 9;
-  inline ::google::protobuf::int32 failed_files_size() const;
-  inline void set_failed_files_size(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint64 failed_files_size() const;
+  inline void set_failed_files_size(::google::protobuf::uint64 value);
 
-  // required int32 gpload_longest_timeused = 10;
+  // required uint64 gpload_longest_timeused = 10;
   inline bool has_gpload_longest_timeused() const;
   inline void clear_gpload_longest_timeused();
   static const int kGploadLongestTimeusedFieldNumber = 10;
-  inline ::google::protobuf::int32 gpload_longest_timeused() const;
-  inline void set_gpload_longest_timeused(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint64 gpload_longest_timeused() const;
+  inline void set_gpload_longest_timeused(::google::protobuf::uint64 value);
 
-  // required int32 gpload_latest_timeused = 11;
+  // required uint64 gpload_latest_timeused = 11;
   inline bool has_gpload_latest_timeused() const;
   inline void clear_gpload_latest_timeused();
   static const int kGploadLatestTimeusedFieldNumber = 11;
-  inline ::google::protobuf::int32 gpload_latest_timeused() const;
-  inline void set_gpload_latest_timeused(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint64 gpload_latest_timeused() const;
+  inline void set_gpload_latest_timeused(::google::protobuf::uint64 value);
 
-  // required int32 gpload_average_timeused = 12;
+  // required uint64 gpload_average_timeused = 12;
   inline bool has_gpload_average_timeused() const;
   inline void clear_gpload_average_timeused();
   static const int kGploadAverageTimeusedFieldNumber = 12;
-  inline ::google::protobuf::int32 gpload_average_timeused() const;
-  inline void set_gpload_average_timeused(::google::protobuf::int32 value);
+  inline ::google::protobuf::uint64 gpload_average_timeused() const;
+  inline void set_gpload_average_timeused(::google::protobuf::uint64 value);
 
   // @@protoc_insertion_point(class_scope:gpstall.ServiceStatus)
  private:
@@ -356,16 +356,16 @@ class ServiceStatus : public ::google::protobuf::Message {
 
   ::std::string* start_time_;
   int service_status_;
-  ::google::protobuf::int32 conn_num_;
-  ::google::protobuf::int32 qps_;
-  ::google::protobuf::int32 gpload_failed_num_;
+  ::google::protobuf::uint32 conn_num_;
+  ::google::protobuf::uint32 qps_;
+  ::google::protobuf::uint32 gpload_failed_num_;
   ::std::string* lastest_failed_time_;
   ::std::string* failed_files_name_;
-  ::google::protobuf::int32 failed_files_num_;
-  ::google::protobuf::int32 failed_files_size_;
-  ::google::protobuf::int32 gpload_longest_timeused_;
-  ::google::protobuf::int32 gpload_latest_timeused_;
-  ::google::protobuf::int32 gpload_average_timeused_;
+  ::google::protobuf::uint64 failed_files_size_;
+  ::google::protobuf::uint64 gpload_longest_timeused_;
+  ::google::protobuf::uint64 gpload_latest_timeused_;
+  ::google::protobuf::uint64 gpload_average_timeused_;
+  ::google::protobuf::uint32 failed_files_num_;
 
   mutable int _cached_size_;
   ::google::protobuf::uint32 _has_bits_[(12 + 31) / 32];
@@ -551,7 +551,7 @@ inline void ServiceStatus::set_service_status(::gpstall::ServiceStatus_Status va
   service_status_ = value;
 }
 
-// required int32 conn_num = 3;
+// required uint32 conn_num = 3;
 inline bool ServiceStatus::has_conn_num() const {
   return (_has_bits_[0] & 0x00000004u) != 0;
 }
@@ -562,18 +562,18 @@ inline void ServiceStatus::clear_has_conn_num() {
   _has_bits_[0] &= ~0x00000004u;
 }
 inline void ServiceStatus::clear_conn_num() {
-  conn_num_ = 0;
+  conn_num_ = 0u;
   clear_has_conn_num();
 }
-inline ::google::protobuf::int32 ServiceStatus::conn_num() const {
+inline ::google::protobuf::uint32 ServiceStatus::conn_num() const {
   return conn_num_;
 }
-inline void ServiceStatus::set_conn_num(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_conn_num(::google::protobuf::uint32 value) {
   set_has_conn_num();
   conn_num_ = value;
 }
 
-// required int32 qps = 4;
+// required uint32 qps = 4;
 inline bool ServiceStatus::has_qps() const {
   return (_has_bits_[0] & 0x00000008u) != 0;
 }
@@ -584,18 +584,18 @@ inline void ServiceStatus::clear_has_qps() {
   _has_bits_[0] &= ~0x00000008u;
 }
 inline void ServiceStatus::clear_qps() {
-  qps_ = 0;
+  qps_ = 0u;
   clear_has_qps();
 }
-inline ::google::protobuf::int32 ServiceStatus::qps() const {
+inline ::google::protobuf::uint32 ServiceStatus::qps() const {
   return qps_;
 }
-inline void ServiceStatus::set_qps(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_qps(::google::protobuf::uint32 value) {
   set_has_qps();
   qps_ = value;
 }
 
-// required int32 gpload_failed_num = 5;
+// required uint32 gpload_failed_num = 5;
 inline bool ServiceStatus::has_gpload_failed_num() const {
   return (_has_bits_[0] & 0x00000010u) != 0;
 }
@@ -606,13 +606,13 @@ inline void ServiceStatus::clear_has_gpload_failed_num() {
   _has_bits_[0] &= ~0x00000010u;
 }
 inline void ServiceStatus::clear_gpload_failed_num() {
-  gpload_failed_num_ = 0;
+  gpload_failed_num_ = 0u;
   clear_has_gpload_failed_num();
 }
-inline ::google::protobuf::int32 ServiceStatus::gpload_failed_num() const {
+inline ::google::protobuf::uint32 ServiceStatus::gpload_failed_num() const {
   return gpload_failed_num_;
 }
-inline void ServiceStatus::set_gpload_failed_num(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_gpload_failed_num(::google::protobuf::uint32 value) {
   set_has_gpload_failed_num();
   gpload_failed_num_ = value;
 }
@@ -687,7 +687,7 @@ inline void ServiceStatus::set_allocated_lastest_failed_time(::std::string* last
   }
 }
 
-// required int32 failed_files_num = 7;
+// required uint32 failed_files_num = 7;
 inline bool ServiceStatus::has_failed_files_num() const {
   return (_has_bits_[0] & 0x00000040u) != 0;
 }
@@ -698,13 +698,13 @@ inline void ServiceStatus::clear_has_failed_files_num() {
   _has_bits_[0] &= ~0x00000040u;
 }
 inline void ServiceStatus::clear_failed_files_num() {
-  failed_files_num_ = 0;
+  failed_files_num_ = 0u;
   clear_has_failed_files_num();
 }
-inline ::google::protobuf::int32 ServiceStatus::failed_files_num() const {
+inline ::google::protobuf::uint32 ServiceStatus::failed_files_num() const {
   return failed_files_num_;
 }
-inline void ServiceStatus::set_failed_files_num(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_failed_files_num(::google::protobuf::uint32 value) {
   set_has_failed_files_num();
   failed_files_num_ = value;
 }
@@ -779,7 +779,7 @@ inline void ServiceStatus::set_allocated_failed_files_name(::std::string* failed
   }
 }
 
-// required int32 failed_files_size = 9;
+// required uint64 failed_files_size = 9;
 inline bool ServiceStatus::has_failed_files_size() const {
   return (_has_bits_[0] & 0x00000100u) != 0;
 }
@@ -790,18 +790,18 @@ inline void ServiceStatus::clear_has_failed_files_size() {
   _has_bits_[0] &= ~0x00000100u;
 }
 inline void ServiceStatus::clear_failed_files_size() {
-  failed_files_size_ = 0;
+  failed_files_size_ = GOOGLE_ULONGLONG(0);
   clear_has_failed_files_size();
 }
-inline ::google::protobuf::int32 ServiceStatus::failed_files_size() const {
+inline ::google::protobuf::uint64 ServiceStatus::failed_files_size() const {
   return failed_files_size_;
 }
-inline void ServiceStatus::set_failed_files_size(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_failed_files_size(::google::protobuf::uint64 value) {
   set_has_failed_files_size();
   failed_files_size_ = value;
 }
 
-// required int32 gpload_longest_timeused = 10;
+// required uint64 gpload_longest_timeused = 10;
 inline bool ServiceStatus::has_gpload_longest_timeused() const {
   return (_has_bits_[0] & 0x00000200u) != 0;
 }
@@ -812,18 +812,18 @@ inline void ServiceStatus::clear_has_gpload_longest_timeused() {
   _has_bits_[0] &= ~0x00000200u;
 }
 inline void ServiceStatus::clear_gpload_longest_timeused() {
-  gpload_longest_timeused_ = 0;
+  gpload_longest_timeused_ = GOOGLE_ULONGLONG(0);
   clear_has_gpload_longest_timeused();
 }
-inline ::google::protobuf::int32 ServiceStatus::gpload_longest_timeused() const {
+inline ::google::protobuf::uint64 ServiceStatus::gpload_longest_timeused() const {
   return gpload_longest_timeused_;
 }
-inline void ServiceStatus::set_gpload_longest_timeused(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_gpload_longest_timeused(::google::protobuf::uint64 value) {
   set_has_gpload_longest_timeused();
   gpload_longest_timeused_ = value;
 }
 
-// required int32 gpload_latest_timeused = 11;
+// required uint64 gpload_latest_timeused = 11;
 inline bool ServiceStatus::has_gpload_latest_timeused() const {
   return (_has_bits_[0] & 0x00000400u) != 0;
 }
@@ -834,18 +834,18 @@ inline void ServiceStatus::clear_has_gpload_latest_timeused() {
   _has_bits_[0] &= ~0x00000400u;
 }
 inline void ServiceStatus::clear_gpload_latest_timeused() {
-  gpload_latest_timeused_ = 0;
+  gpload_latest_timeused_ = GOOGLE_ULONGLONG(0);
   clear_has_gpload_latest_timeused();
 }
-inline ::google::protobuf::int32 ServiceStatus::gpload_latest_timeused() const {
+inline ::google::protobuf::uint64 ServiceStatus::gpload_latest_timeused() const {
   return gpload_latest_timeused_;
 }
-inline void ServiceStatus::set_gpload_latest_timeused(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_gpload_latest_timeused(::google::protobuf::uint64 value) {
   set_has_gpload_latest_timeused();
   gpload_latest_timeused_ = value;
 }
 
-// required int32 gpload_average_timeused = 12;
+// required uint64 gpload_average_timeused = 12;
 inline bool ServiceStatus::has_gpload_average_timeused() const {
   return (_has_bits_[0] & 0x00000800u) != 0;
 }
@@ -856,13 +856,13 @@ inline void ServiceStatus::clear_has_gpload_average_timeused() {
   _has_bits_[0] &= ~0x00000800u;
 }
 inline void ServiceStatus::clear_gpload_average_timeused() {
-  gpload_average_timeused_ = 0;
+  gpload_average_timeused_ = GOOGLE_ULONGLONG(0);
   clear_has_gpload_average_timeused();
 }
-inline ::google::protobuf::int32 ServiceStatus::gpload_average_timeused() const {
+inline ::google::protobuf::uint64 ServiceStatus::gpload_average_timeused() const {
   return gpload_average_timeused_;
 }
-inline void ServiceStatus::set_gpload_average_timeused(::google::protobuf::int32 value) {
+inline void ServiceStatus::set_gpload_average_timeused(::google::protobuf::uint64 value) {
   set_has_gpload_average_timeused();
   gpload_average_timeused_ = value;
 }

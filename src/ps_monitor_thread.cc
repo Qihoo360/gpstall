@@ -63,8 +63,8 @@ void MonitorConn::GetGploadStatus() {
 PSMonitorThread::PSMonitorThread(int port, PSDispatchThread *thread)
   : pink::HolyThread<MonitorConn>::HolyThread(port, 0),
     ps_dispatch_thread(thread) {
-    time_t now;
-    time(&now);
-    start_time.assign(ctime(&now));
-    start_time.resize(start_time.size() - 1);
+    time_t now = time(NULL);
+    char buf[128] = {0};
+    strftime(buf, 128, "%Y%m%d%H%M%S", localtime(&now));
+    start_time.assign(buf);
 }

@@ -48,11 +48,11 @@ class PSServer {
   };
 
   // gpload err info
-  int gpload_failed_num;
+  uint32_t gpload_failed_num;
   std::string latest_failed_time;
-  int failed_files_num;
+  uint32_t failed_files_num;
   std::string failed_files_name;
-  int failed_files_size; // KB
+  uint64_t failed_files_size; // KB
   uint64_t gpload_longest_timeused; // ms
   uint64_t gpload_latest_timeused; // ms
   uint64_t gpload_average_timeused; // ms

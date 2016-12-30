@@ -50,13 +50,10 @@ pink::Status Pcli::RecvStatus() {
   }
   std::cout << "conn_num: " << service_status_.conn_num() << std::endl;
   std::cout << "qps: " << service_status_.qps() << std::endl;
-  std::cout << std::endl;
-
-  std::cout << "gpload_failed_num: " << service_status_.gpload_failed_num() << std::endl;
+  std::cout << "gpload_failed_count: " << service_status_.gpload_failed_num() << std::endl;
   std::cout << "lastest_failed_time: " << service_status_.lastest_failed_time() << std::endl;
   std::cout << "failed_files_num: " << service_status_.failed_files_num() << std::endl;
-  std::cout << "failed_files_name: " << std::endl;
-  std::cout << service_status_.failed_files_name() << std::endl;
+  std::cout << "failed_files_name: " << service_status_.failed_files_name() << std::endl;
   std::cout << "failed_files_size: " << service_status_.failed_files_size() << std::endl;
   std::cout << "longest_gpload_timeused: " << service_status_.gpload_longest_timeused() / 1000 << std::endl;
   std::cout << "latest_gpload_timeused: " << service_status_.gpload_latest_timeused() / 1000 << std::endl;

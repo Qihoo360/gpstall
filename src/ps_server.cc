@@ -159,10 +159,10 @@ void PSServer::CollectGploadErrInfo(int ret) {
   if (load_ret != 0) {
     // gpload error occured
     gpload_failed_num += 1;
-    time_t now;
-    time(&now);
-    latest_failed_time.assign(ctime(&now));
-    latest_failed_time.resize(latest_failed_time.size() - 1);
+    time_t now = time(NULL);
+    char buf[128] = {0};
+    strftime(buf, 128, "%Y%m%d%H%M%S", localtime(&now));
+    latest_failed_time.assign(buf);
   }
 
   // gpload timeuesd statistics
@@ -177,18 +177,16 @@ void PSServer::CollectGploadErrInfo(int ret) {
 
   // gpload failed files info
   // failed_files_num, failed_file_name, failed_files_size
-  failed_files_size = 0;
   failed_files_num = 0;
   std::vector<std::string> files;
   slash::GetDescendant(options_.data_path, files);
   for (auto iter = files.begin(); iter != files.end(); iter++) {
     if (iter->find("failed") != std::string::npos) {
       failed_files_num += 1;
-      std::ifstream f(*iter, std::ios::binary | std::ios::ate);
-      failed_files_size += static_cast<uint64_t>(f.tellg());
     }
   }
 
+  failed_files_size = 0;
   char line[TMP_BUF_SIZE] = {0};
   std::string latest_failed_file = options_.log_path + "/latest_failed_file";
   failed_files_name.clear();
@@ -200,8 +198,22 @@ void PSServer::CollectGploadErrInfo(int ret) {
     do {
       memset(line, 0, TMP_BUF_SIZE);
       ret = sequential_file->ReadLine(line, TMP_BUF_SIZE);
-      failed_files_name.append(line);
+      std::string fname(line);
+      if (!fname.empty()) {
+        failed_files_name.append(fname);
+        std::ifstream f(fname.substr(0, fname.size() - 1), std::ios::binary | std::ios::ate);
+        failed_files_size += static_cast<uint64_t>(f.tellg());
+      }
     } while (ret != NULL);
+
+    for (int i = 0; i < failed_files_name.size(); i++) {
+      if (i == failed_files_name.size() - 1)
+        failed_files_name[i] = 0;
+      else if (failed_files_name[i] == '\n')
+        failed_files_name[i] = ',';
+    }
+
+    DLOG(INFO) << "file size: " << failed_files_size << std::endl;
 
     delete sequential_file;
   }

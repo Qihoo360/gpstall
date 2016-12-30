@@ -118,13 +118,13 @@ void protobuf_AddDesc_monitor_2eproto() {
     "ommand\030\001 \002(\t:\005error\"\230\003\n\rServiceStatus\022\022\n"
     "\nstart_time\030\001 \002(\t\022=\n\016service_status\030\002 \002("
     "\0162\035.gpstall.ServiceStatus.Status:\006UNKNOW"
-    "\022\020\n\010conn_num\030\003 \002(\005\022\013\n\003qps\030\004 \002(\005\022\031\n\021gploa"
-    "d_failed_num\030\005 \002(\005\022\033\n\023lastest_failed_tim"
-    "e\030\006 \002(\t\022\030\n\020failed_files_num\030\007 \002(\005\022\031\n\021fai"
+    "\022\020\n\010conn_num\030\003 \002(\r\022\013\n\003qps\030\004 \002(\r\022\031\n\021gploa"
+    "d_failed_num\030\005 \002(\r\022\033\n\023lastest_failed_tim"
+    "e\030\006 \002(\t\022\030\n\020failed_files_num\030\007 \002(\r\022\031\n\021fai"
     "led_files_name\030\010 \002(\t\022\031\n\021failed_files_siz"
-    "e\030\t \002(\005\022\037\n\027gpload_longest_timeused\030\n \002(\005"
-    "\022\036\n\026gpload_latest_timeused\030\013 \002(\005\022\037\n\027gplo"
-    "ad_average_timeused\030\014 \002(\005\"+\n\006Status\022\n\n\006O"
+    "e\030\t \002(\004\022\037\n\027gpload_longest_timeused\030\n \002(\004"
+    "\022\036\n\026gpload_latest_timeused\030\013 \002(\004\022\037\n\027gplo"
+    "ad_average_timeused\030\014 \002(\004\"+\n\006Status\022\n\n\006O"
     "NLINE\020\000\022\t\n\005STALL\020\001\022\n\n\006UNKNOW\020\002", 470);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "monitor.proto", &protobuf_RegisterTypes);
@@ -429,16 +429,16 @@ void ServiceStatus::SharedCtor() {
   _cached_size_ = 0;
   start_time_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   service_status_ = 2;
-  conn_num_ = 0;
-  qps_ = 0;
-  gpload_failed_num_ = 0;
+  conn_num_ = 0u;
+  qps_ = 0u;
+  gpload_failed_num_ = 0u;
   lastest_failed_time_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  failed_files_num_ = 0;
+  failed_files_num_ = 0u;
   failed_files_name_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
-  failed_files_size_ = 0;
-  gpload_longest_timeused_ = 0;
-  gpload_latest_timeused_ = 0;
-  gpload_average_timeused_ = 0;
+  failed_files_size_ = GOOGLE_ULONGLONG(0);
+  gpload_longest_timeused_ = GOOGLE_ULONGLONG(0);
+  gpload_latest_timeused_ = GOOGLE_ULONGLONG(0);
+  gpload_average_timeused_ = GOOGLE_ULONGLONG(0);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -489,15 +489,15 @@ void ServiceStatus::Clear() {
       }
     }
     service_status_ = 2;
-    conn_num_ = 0;
-    qps_ = 0;
-    gpload_failed_num_ = 0;
+    conn_num_ = 0u;
+    qps_ = 0u;
+    gpload_failed_num_ = 0u;
     if (has_lastest_failed_time()) {
       if (lastest_failed_time_ != &::google::protobuf::internal::kEmptyString) {
         lastest_failed_time_->clear();
       }
     }
-    failed_files_num_ = 0;
+    failed_files_num_ = 0u;
     if (has_failed_files_name()) {
       if (failed_files_name_ != &::google::protobuf::internal::kEmptyString) {
         failed_files_name_->clear();
@@ -505,10 +505,10 @@ void ServiceStatus::Clear() {
     }
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    failed_files_size_ = 0;
-    gpload_longest_timeused_ = 0;
-    gpload_latest_timeused_ = 0;
-    gpload_average_timeused_ = 0;
+    failed_files_size_ = GOOGLE_ULONGLONG(0);
+    gpload_longest_timeused_ = GOOGLE_ULONGLONG(0);
+    gpload_latest_timeused_ = GOOGLE_ULONGLONG(0);
+    gpload_average_timeused_ = GOOGLE_ULONGLONG(0);
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -557,13 +557,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 conn_num = 3;
+      // required uint32 conn_num = 3;
       case 3: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_conn_num:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &conn_num_)));
           set_has_conn_num();
         } else {
@@ -573,13 +573,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 qps = 4;
+      // required uint32 qps = 4;
       case 4: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_qps:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &qps_)));
           set_has_qps();
         } else {
@@ -589,13 +589,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 gpload_failed_num = 5;
+      // required uint32 gpload_failed_num = 5;
       case 5: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_gpload_failed_num:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &gpload_failed_num_)));
           set_has_gpload_failed_num();
         } else {
@@ -622,13 +622,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 failed_files_num = 7;
+      // required uint32 failed_files_num = 7;
       case 7: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_failed_files_num:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &failed_files_num_)));
           set_has_failed_files_num();
         } else {
@@ -655,13 +655,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 failed_files_size = 9;
+      // required uint64 failed_files_size = 9;
       case 9: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_failed_files_size:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &failed_files_size_)));
           set_has_failed_files_size();
         } else {
@@ -671,13 +671,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 gpload_longest_timeused = 10;
+      // required uint64 gpload_longest_timeused = 10;
       case 10: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_gpload_longest_timeused:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &gpload_longest_timeused_)));
           set_has_gpload_longest_timeused();
         } else {
@@ -687,13 +687,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 gpload_latest_timeused = 11;
+      // required uint64 gpload_latest_timeused = 11;
       case 11: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_gpload_latest_timeused:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &gpload_latest_timeused_)));
           set_has_gpload_latest_timeused();
         } else {
@@ -703,13 +703,13 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required int32 gpload_average_timeused = 12;
+      // required uint64 gpload_average_timeused = 12;
       case 12: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_VARINT) {
          parse_gpload_average_timeused:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
                  input, &gpload_average_timeused_)));
           set_has_gpload_average_timeused();
         } else {
@@ -752,19 +752,19 @@ void ServiceStatus::SerializeWithCachedSizes(
       2, this->service_status(), output);
   }
 
-  // required int32 conn_num = 3;
+  // required uint32 conn_num = 3;
   if (has_conn_num()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(3, this->conn_num(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->conn_num(), output);
   }
 
-  // required int32 qps = 4;
+  // required uint32 qps = 4;
   if (has_qps()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->qps(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->qps(), output);
   }
 
-  // required int32 gpload_failed_num = 5;
+  // required uint32 gpload_failed_num = 5;
   if (has_gpload_failed_num()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->gpload_failed_num(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(5, this->gpload_failed_num(), output);
   }
 
   // required string lastest_failed_time = 6;
@@ -776,9 +776,9 @@ void ServiceStatus::SerializeWithCachedSizes(
       6, this->lastest_failed_time(), output);
   }
 
-  // required int32 failed_files_num = 7;
+  // required uint32 failed_files_num = 7;
   if (has_failed_files_num()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(7, this->failed_files_num(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->failed_files_num(), output);
   }
 
   // required string failed_files_name = 8;
@@ -790,24 +790,24 @@ void ServiceStatus::SerializeWithCachedSizes(
       8, this->failed_files_name(), output);
   }
 
-  // required int32 failed_files_size = 9;
+  // required uint64 failed_files_size = 9;
   if (has_failed_files_size()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(9, this->failed_files_size(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(9, this->failed_files_size(), output);
   }
 
-  // required int32 gpload_longest_timeused = 10;
+  // required uint64 gpload_longest_timeused = 10;
   if (has_gpload_longest_timeused()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(10, this->gpload_longest_timeused(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(10, this->gpload_longest_timeused(), output);
   }
 
-  // required int32 gpload_latest_timeused = 11;
+  // required uint64 gpload_latest_timeused = 11;
   if (has_gpload_latest_timeused()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(11, this->gpload_latest_timeused(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(11, this->gpload_latest_timeused(), output);
   }
 
-  // required int32 gpload_average_timeused = 12;
+  // required uint64 gpload_average_timeused = 12;
   if (has_gpload_average_timeused()) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(12, this->gpload_average_timeused(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(12, this->gpload_average_timeused(), output);
   }
 
   if (!unknown_fields().empty()) {
@@ -834,19 +834,19 @@ void ServiceStatus::SerializeWithCachedSizes(
       2, this->service_status(), target);
   }
 
-  // required int32 conn_num = 3;
+  // required uint32 conn_num = 3;
   if (has_conn_num()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(3, this->conn_num(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->conn_num(), target);
   }
 
-  // required int32 qps = 4;
+  // required uint32 qps = 4;
   if (has_qps()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->qps(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->qps(), target);
   }
 
-  // required int32 gpload_failed_num = 5;
+  // required uint32 gpload_failed_num = 5;
   if (has_gpload_failed_num()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->gpload_failed_num(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(5, this->gpload_failed_num(), target);
   }
 
   // required string lastest_failed_time = 6;
@@ -859,9 +859,9 @@ void ServiceStatus::SerializeWithCachedSizes(
         6, this->lastest_failed_time(), target);
   }
 
-  // required int32 failed_files_num = 7;
+  // required uint32 failed_files_num = 7;
   if (has_failed_files_num()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(7, this->failed_files_num(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->failed_files_num(), target);
   }
 
   // required string failed_files_name = 8;
@@ -874,24 +874,24 @@ void ServiceStatus::SerializeWithCachedSizes(
         8, this->failed_files_name(), target);
   }
 
-  // required int32 failed_files_size = 9;
+  // required uint64 failed_files_size = 9;
   if (has_failed_files_size()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(9, this->failed_files_size(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(9, this->failed_files_size(), target);
   }
 
-  // required int32 gpload_longest_timeused = 10;
+  // required uint64 gpload_longest_timeused = 10;
   if (has_gpload_longest_timeused()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(10, this->gpload_longest_timeused(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(10, this->gpload_longest_timeused(), target);
   }
 
-  // required int32 gpload_latest_timeused = 11;
+  // required uint64 gpload_latest_timeused = 11;
   if (has_gpload_latest_timeused()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(11, this->gpload_latest_timeused(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(11, this->gpload_latest_timeused(), target);
   }
 
-  // required int32 gpload_average_timeused = 12;
+  // required uint64 gpload_average_timeused = 12;
   if (has_gpload_average_timeused()) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(12, this->gpload_average_timeused(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(12, this->gpload_average_timeused(), target);
   }
 
   if (!unknown_fields().empty()) {
@@ -918,24 +918,24 @@ int ServiceStatus::ByteSize() const {
         ::google::protobuf::internal::WireFormatLite::EnumSize(this->service_status());
     }
 
-    // required int32 conn_num = 3;
+    // required uint32 conn_num = 3;
     if (has_conn_num()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->conn_num());
     }
 
-    // required int32 qps = 4;
+    // required uint32 qps = 4;
     if (has_qps()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->qps());
     }
 
-    // required int32 gpload_failed_num = 5;
+    // required uint32 gpload_failed_num = 5;
     if (has_gpload_failed_num()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->gpload_failed_num());
     }
 
@@ -946,10 +946,10 @@ int ServiceStatus::ByteSize() const {
           this->lastest_failed_time());
     }
 
-    // required int32 failed_files_num = 7;
+    // required uint32 failed_files_num = 7;
     if (has_failed_files_num()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt32Size(
           this->failed_files_num());
     }
 
@@ -962,31 +962,31 @@ int ServiceStatus::ByteSize() const {
 
   }
   if (_has_bits_[8 / 32] & (0xffu << (8 % 32))) {
-    // required int32 failed_files_size = 9;
+    // required uint64 failed_files_size = 9;
     if (has_failed_files_size()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->failed_files_size());
     }
 
-    // required int32 gpload_longest_timeused = 10;
+    // required uint64 gpload_longest_timeused = 10;
     if (has_gpload_longest_timeused()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->gpload_longest_timeused());
     }
 
-    // required int32 gpload_latest_timeused = 11;
+    // required uint64 gpload_latest_timeused = 11;
     if (has_gpload_latest_timeused()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->gpload_latest_timeused());
     }
 
-    // required int32 gpload_average_timeused = 12;
+    // required uint64 gpload_average_timeused = 12;
     if (has_gpload_average_timeused()) {
       total_size += 1 +
-        ::google::protobuf::internal::WireFormatLite::Int32Size(
+        ::google::protobuf::internal::WireFormatLite::UInt64Size(
           this->gpload_average_timeused());
     }
 
