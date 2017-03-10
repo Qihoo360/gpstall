@@ -58,7 +58,7 @@ for database in `ls $DATA_DIR` ; do
       files=`find $data_path -maxdepth 1 -name "*csv"`
       #echo "files: $files"
 
-      pattern+="\\n          - ${data_path}/*.csv"
+      pattern="\\n          - ${data_path}/*.csv"
       echo "pattern: ${pattern}"
 
       cp -f $ORI_CONF $TMP_CONF
