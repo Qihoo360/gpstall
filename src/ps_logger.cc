@@ -189,10 +189,10 @@ Status Logger::Put(const std::string &item) {
   return s;
 }
 
-Status Logger::Flush() {
+Status Logger::Flush(bool header_changed) {
   Status s;
 
-  if (!empty_file_) {
+  if (!empty_file_ || header_changed) {
     delete queue_;
     queue_ = NULL;
     std::string old_filename = NewFileName(filename, pro_num_);

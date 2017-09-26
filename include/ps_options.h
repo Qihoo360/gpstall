@@ -41,7 +41,7 @@ struct PSOptions {
   int flush_interval;
 
   // TODO session timeout
-  int64_t timeout;
+  int timeout;
 
   std::string data_path;
   std::string log_path;

@@ -78,7 +78,7 @@ for database in `ls $DATA_DIR` ; do
       fi
 
       echo '------------------------------' >> $LOG_DIR/gpload.log
-      gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
+      timeout 600  gpload -f $TMP_CONF -l $LOG_DIR/gpload.log
       retv=$?
       if [ $retv -eq 0 ] ; then
         for file in $files ; do
@@ -87,7 +87,7 @@ for database in `ls $DATA_DIR` ; do
           rm -f $file
         done
 
-      elif [ $retv -eq 2 ] ; then
+      elif [ $retv -ge 2 ] ; then
         load_ret=2
         rm -f ${LOG_DIR}/latest_failed_file
         failed_path=${data_path}/failed/

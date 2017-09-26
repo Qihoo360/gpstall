@@ -38,8 +38,10 @@ void protobuf_AssignDesc_monitor_2eproto() {
       "monitor.proto");
   GOOGLE_CHECK(file != NULL);
   Command_descriptor_ = file->message_type(0);
-  static const int Command_offsets_[1] = {
+  static const int Command_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, command_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, user_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Command, password_),
   };
   Command_reflection_ =
     new ::google::protobuf::internal::GeneratedMessageReflection(
@@ -114,18 +116,19 @@ void protobuf_AddDesc_monitor_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\rmonitor.proto\022\007gpstall\"!\n\007Command\022\026\n\007c"
-    "ommand\030\001 \002(\t:\005error\"\230\003\n\rServiceStatus\022\022\n"
-    "\nstart_time\030\001 \002(\t\022=\n\016service_status\030\002 \002("
-    "\0162\035.gpstall.ServiceStatus.Status:\006UNKNOW"
-    "\022\020\n\010conn_num\030\003 \002(\r\022\013\n\003qps\030\004 \002(\r\022\031\n\021gploa"
-    "d_failed_num\030\005 \002(\r\022\033\n\023lastest_failed_tim"
-    "e\030\006 \002(\t\022\030\n\020failed_files_num\030\007 \002(\r\022\031\n\021fai"
-    "led_files_name\030\010 \002(\t\022\031\n\021failed_files_siz"
-    "e\030\t \002(\004\022\037\n\027gpload_longest_timeused\030\n \002(\004"
-    "\022\036\n\026gpload_latest_timeused\030\013 \002(\004\022\037\n\027gplo"
-    "ad_average_timeused\030\014 \002(\004\"+\n\006Status\022\n\n\006O"
-    "NLINE\020\000\022\t\n\005STALL\020\001\022\n\n\006UNKNOW\020\002", 470);
+    "\n\rmonitor.proto\022\007gpstall\"A\n\007Command\022\026\n\007c"
+    "ommand\030\001 \002(\t:\005error\022\014\n\004user\030\002 \001(\t\022\020\n\010pas"
+    "sword\030\003 \001(\t\"\230\003\n\rServiceStatus\022\022\n\nstart_t"
+    "ime\030\001 \002(\t\022=\n\016service_status\030\002 \002(\0162\035.gpst"
+    "all.ServiceStatus.Status:\006UNKNOW\022\020\n\010conn"
+    "_num\030\003 \002(\r\022\013\n\003qps\030\004 \002(\r\022\031\n\021gpload_failed"
+    "_num\030\005 \002(\r\022\033\n\023lastest_failed_time\030\006 \002(\t\022"
+    "\030\n\020failed_files_num\030\007 \002(\r\022\031\n\021failed_file"
+    "s_name\030\010 \001(\t\022\031\n\021failed_files_size\030\t \002(\004\022"
+    "\037\n\027gpload_longest_timeused\030\n \002(\004\022\036\n\026gplo"
+    "ad_latest_timeused\030\013 \002(\004\022\037\n\027gpload_avera"
+    "ge_timeused\030\014 \002(\004\"+\n\006Status\022\n\n\006ONLINE\020\000\022"
+    "\t\n\005STALL\020\001\022\n\n\006UNKNOW\020\002", 502);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "monitor.proto", &protobuf_RegisterTypes);
   Command::_default_command_ =
@@ -149,6 +152,8 @@ struct StaticDescriptorInitializer_monitor_2eproto {
 ::std::string* Command::_default_command_ = NULL;
 #ifndef _MSC_VER
 const int Command::kCommandFieldNumber;
+const int Command::kUserFieldNumber;
+const int Command::kPasswordFieldNumber;
 #endif  // !_MSC_VER
 
 Command::Command()
@@ -168,6 +173,8 @@ Command::Command(const Command& from)
 void Command::SharedCtor() {
   _cached_size_ = 0;
   command_ = const_cast< ::std::string*>(_default_command_);
+  user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
 }
 
@@ -178,6 +185,12 @@ Command::~Command() {
 void Command::SharedDtor() {
   if (command_ != _default_command_) {
     delete command_;
+  }
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    delete user_;
+  }
+  if (password_ != &::google::protobuf::internal::kEmptyString) {
+    delete password_;
   }
   if (this != default_instance_) {
   }
@@ -211,6 +224,16 @@ void Command::Clear() {
         command_->assign(*_default_command_);
       }
     }
+    if (has_user()) {
+      if (user_ != &::google::protobuf::internal::kEmptyString) {
+        user_->clear();
+      }
+    }
+    if (has_password()) {
+      if (password_ != &::google::protobuf::internal::kEmptyString) {
+        password_->clear();
+      }
+    }
   }
   ::memset(_has_bits_, 0, sizeof(_has_bits_));
   mutable_unknown_fields()->Clear();
@@ -230,6 +253,40 @@ bool Command::MergePartialFromCodedStream(
                 input, this->mutable_command()));
           ::google::protobuf::internal::WireFormat::VerifyUTF8String(
             this->command().data(), this->command().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(18)) goto parse_user;
+        break;
+      }
+
+      // optional string user = 2;
+      case 2: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_user:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_user()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->user().data(), this->user().length(),
+            ::google::protobuf::internal::WireFormat::PARSE);
+        } else {
+          goto handle_uninterpreted;
+        }
+        if (input->ExpectTag(26)) goto parse_password;
+        break;
+      }
+
+      // optional string password = 3;
+      case 3: {
+        if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
+         parse_password:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_password()));
+          ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+            this->password().data(), this->password().length(),
             ::google::protobuf::internal::WireFormat::PARSE);
         } else {
           goto handle_uninterpreted;
@@ -265,6 +322,24 @@ void Command::SerializeWithCachedSizes(
       1, this->command(), output);
   }
 
+  // optional string user = 2;
+  if (has_user()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->user().data(), this->user().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      2, this->user(), output);
+  }
+
+  // optional string password = 3;
+  if (has_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->password().data(), this->password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    ::google::protobuf::internal::WireFormatLite::WriteString(
+      3, this->password(), output);
+  }
+
   if (!unknown_fields().empty()) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         unknown_fields(), output);
@@ -283,6 +358,26 @@ void Command::SerializeWithCachedSizes(
         1, this->command(), target);
   }
 
+  // optional string user = 2;
+  if (has_user()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->user().data(), this->user().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        2, this->user(), target);
+  }
+
+  // optional string password = 3;
+  if (has_password()) {
+    ::google::protobuf::internal::WireFormat::VerifyUTF8String(
+      this->password().data(), this->password().length(),
+      ::google::protobuf::internal::WireFormat::SERIALIZE);
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        3, this->password(), target);
+  }
+
   if (!unknown_fields().empty()) {
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         unknown_fields(), target);
@@ -299,6 +394,20 @@ int Command::ByteSize() const {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
           this->command());
+    }
+
+    // optional string user = 2;
+    if (has_user()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->user());
+    }
+
+    // optional string password = 3;
+    if (has_password()) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::StringSize(
+          this->password());
     }
 
   }
@@ -331,6 +440,12 @@ void Command::MergeFrom(const Command& from) {
     if (from.has_command()) {
       set_command(from.command());
     }
+    if (from.has_user()) {
+      set_user(from.user());
+    }
+    if (from.has_password()) {
+      set_password(from.password());
+    }
   }
   mutable_unknown_fields()->MergeFrom(from.unknown_fields());
 }
@@ -356,6 +471,8 @@ bool Command::IsInitialized() const {
 void Command::Swap(Command* other) {
   if (other != this) {
     std::swap(command_, other->command_);
+    std::swap(user_, other->user_);
+    std::swap(password_, other->password_);
     std::swap(_has_bits_[0], other->_has_bits_[0]);
     _unknown_fields_.Swap(&other->_unknown_fields_);
     std::swap(_cached_size_, other->_cached_size_);
@@ -638,7 +755,7 @@ bool ServiceStatus::MergePartialFromCodedStream(
         break;
       }
 
-      // required string failed_files_name = 8;
+      // optional string failed_files_name = 8;
       case 8: {
         if (::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
             ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED) {
@@ -781,7 +898,7 @@ void ServiceStatus::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(7, this->failed_files_num(), output);
   }
 
-  // required string failed_files_name = 8;
+  // optional string failed_files_name = 8;
   if (has_failed_files_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->failed_files_name().data(), this->failed_files_name().length(),
@@ -864,7 +981,7 @@ void ServiceStatus::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(7, this->failed_files_num(), target);
   }
 
-  // required string failed_files_name = 8;
+  // optional string failed_files_name = 8;
   if (has_failed_files_name()) {
     ::google::protobuf::internal::WireFormat::VerifyUTF8String(
       this->failed_files_name().data(), this->failed_files_name().length(),
@@ -953,7 +1070,7 @@ int ServiceStatus::ByteSize() const {
           this->failed_files_num());
     }
 
-    // required string failed_files_name = 8;
+    // optional string failed_files_name = 8;
     if (has_failed_files_name()) {
       total_size += 1 +
         ::google::protobuf::internal::WireFormatLite::StringSize(
@@ -1072,7 +1189,7 @@ void ServiceStatus::CopyFrom(const ServiceStatus& from) {
 }
 
 bool ServiceStatus::IsInitialized() const {
-  if ((_has_bits_[0] & 0x00000fff) != 0x00000fff) return false;
+  if ((_has_bits_[0] & 0x00000f7f) != 0x00000f7f) return false;
 
   return true;
 }

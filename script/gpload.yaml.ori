@@ -19,6 +19,7 @@ GPLOAD:
     #- COLUMNS:
     #     - attr1:
     - ERROR_LIMIT: {ERROR_LIMIT}
+    - MAX_LINE_LENGTH: 327680
    EXTERNAL:
     - SCHEMA: '%'
    OUTPUT:

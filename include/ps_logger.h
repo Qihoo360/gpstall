@@ -33,7 +33,7 @@ class Logger {
   void Unlock()       { mutex_.Unlock(); }
 
   Status Put(const std::string& item);
-  Status Flush();
+  Status Flush(bool header_changed);
 
   Status GetProducerStatus(uint32_t* filenum, uint64_t* pro_offset);
 
@@ -44,6 +44,14 @@ class Logger {
 
   uint64_t file_size() {
     return file_size_;
+  }
+
+  const std::string & Header() const {
+    return header_;
+  }
+
+  void SetHeader(const std::string header) {
+    header_ = header;
   }
 
   std::string filename;

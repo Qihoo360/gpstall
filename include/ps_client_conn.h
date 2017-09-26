@@ -6,7 +6,6 @@
 #include "pg_conn.h"
 #include "pink_thread.h"
 
-
 class PSWorkerThread;
 
 class PSClientConn : public pink::PGConn {
@@ -30,6 +29,7 @@ class PSClientConn : public pink::PGConn {
   virtual bool CheckUser(const std::string &user);
   virtual bool CheckPasswd(const std::string &passwd);
   virtual bool Glog(const std::string &msg);
+  virtual void StallStatus(std::string &ss) const;
 };
 
 #endif

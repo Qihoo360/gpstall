@@ -2,6 +2,11 @@
 #include <glog/logging.h>
 
 #include <fstream>
+#include <unistd.h>
+#include <errno.h>
+#include <signal.h>
+#include <sys/select.h>
+#include <sys/wait.h>
 
 #include "ps_server.h"
 #include "ps_monitor_thread.h"
@@ -27,7 +32,7 @@ PSServer::PSServer(const PSOptions& options)
 
     options_.Dump();
     // Create thread
-    worker_num_ = options_.worker_num; 
+    worker_num_ = (options_.worker_num < kMaxWorkerThread ? options_.worker_num : kMaxWorkerThread); 
     for (int i = 0; i < worker_num_; i++) {
       ps_worker_thread_[i] = new PSWorkerThread(kWorkerCronInterval);
     }
@@ -89,15 +94,28 @@ Status PSServer::Start() {
 // Mutex should be held
 Logger* PSServer::GetLogger(const std::string &database, const std::string &table, const std::string &header) {
   std::string key = database + "/" + table; 
-
+  
   std::unordered_map<std::string, Logger *>::const_iterator it = files_.find(key);
   if (it == files_.end()) {
     Logger *log = new Logger(options_.data_path + key, options_.file_size, header);
     files_[key] = log;
     return log;
   } else {
-    return it->second;
-  }
+      if (header != it->second->Header()) {
+        //when the insert sentence changed the header, the log should be flushed
+        //resetHeader && it->second->Flush();
+        bool header_changed = true;
+        uint32_t filenum;
+        uint64_t offset;
+        it->second->GetProducerStatus(&filenum, &offset);
+        it->second->SetHeader(header);
+        if (it->second->Flush(header_changed).ok()) {
+          LOG(INFO) << " header had changed, " << " FlushLog " << it->second->filename << filenum << " at offset " << offset;
+        }
+        DoTimingTask();
+      }
+      return it->second;
+    }
 }
 
 void PSServer::MaybeFlushLog() {
@@ -109,11 +127,12 @@ void PSServer::MaybeFlushLog() {
   std::unordered_map<std::string, Logger *>::iterator it = files_.begin();
   for (; it != files_.end(); it++) {
     Logger* log = it->second;
+    bool header_changed = false;
     uint32_t filenum;
     uint64_t offset;
     log->GetProducerStatus(&filenum, &offset);
     //LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
-    if (log->Flush().ok()) {
+    if (log->Flush(header_changed).ok()) {
       LOG(INFO) << " FlushLog " << log->filename << filenum << " at offset " << offset;
     }
   }
@@ -137,25 +156,35 @@ void PSServer::DoTimingTask() {
           options_.error_limit,
           getpid());
 
-  DLOG(INFO) << "Cron Load: " << cmd;
+  DLOG(INFO) << "Cron Load: " << cmd << std::endl;
 
   int ret = 0;
   {
     CalcExecTime t(&gpload_latest_timeused);
     set_is_stall(true);
     ret = system(cmd);
+    /*
+    std::string cmd_string(cmd);
+    long timeout_ms = options_.timeout;
+    ret = ExecuteScript(cmd_string, timeout_ms);
+    */
     set_is_stall(false);
   }
   CollectGploadErrInfo(ret);
 }
 
 void PSServer::CollectGploadErrInfo(int ret) {
+   
   if (WIFSIGNALED(ret) && (WTERMSIG(ret) == SIGINT || WTERMSIG(ret) == SIGQUIT))
     Exit();
+  
   int load_ret = WEXITSTATUS(ret);
-  DLOG(INFO) << "Cron return: " << load_ret;
-  DLOG(INFO) << "timeused: " << gpload_latest_timeused;
+  
 
+  //int load_ret = ret;
+  DLOG(INFO) << "Cron return: " << load_ret;
+  DLOG(INFO) << "timeused: " << gpload_latest_timeused << std::endl;
+  
   if (load_ret != 0) {
     // gpload error occured
     gpload_failed_num += 1;
@@ -194,17 +223,17 @@ void PSServer::CollectGploadErrInfo(int ret) {
     slash::SequentialFile *sequential_file;
     slash::NewSequentialFile(latest_failed_file, &sequential_file);
 
-    char *ret = NULL;
+    char *ret_p = NULL;
     do {
       memset(line, 0, TMP_BUF_SIZE);
-      ret = sequential_file->ReadLine(line, TMP_BUF_SIZE);
+      ret_p = sequential_file->ReadLine(line, TMP_BUF_SIZE);
       std::string fname(line);
       if (!fname.empty()) {
         failed_files_name.append(fname);
         std::ifstream f(fname.substr(0, fname.size() - 1), std::ios::binary | std::ios::ate);
         failed_files_size += static_cast<uint64_t>(f.tellg());
       }
-    } while (ret != NULL);
+    } while (ret_p != NULL);
 
     for (int i = 0; i < failed_files_name.size(); i++) {
       if (i == failed_files_name.size() - 1)
@@ -218,3 +247,5 @@ void PSServer::CollectGploadErrInfo(int ret) {
     delete sequential_file;
   }
 }
+
+

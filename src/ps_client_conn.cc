@@ -3,10 +3,12 @@
 #include <vector>
 #include <algorithm>
 #include <glog/logging.h>
+#include <cstdint>
 
 #include "ps_worker_thread.h"
 #include "ps_server.h"
-
+#include "ps_monitor_thread.h"
+#include "ps_dispatch_thread.h"
 extern PSServer* ps_server;
 
 ////// PSClientConn //////
@@ -40,6 +42,45 @@ int PSClientConn::DealMessage() {
   return 0;
 }
 
+void PSClientConn::StallStatus(std::string  &ss) const {
+  ss.clear();
+  PSDispatchThread* psd = ps_server->DispatchThread();
+  PSMonitorThread* psm = ps_server->MonitorThread();
+
+  char inf[10240];
+  std::string status = "STALL";
+  if (!ps_server->is_stall()) {
+    status = "ONLINE";
+  }
+
+  snprintf(inf, 10240, "  start_time: %s\n"
+                       "  service_status: %s\n"  
+                       "  conn_num: %u\n"
+                       "  QPS: %lu\n"
+                       "  gpload_failed_num: %u\n"
+                       "  latest_failed_time: %s\n"
+                       "  failed_files_num: %u\n"
+                       "  failed_files_size: %lu\n"
+                       "  gpload_longest_timeused: %lu\n"
+                       "  gpload_latest_timeused: %lu\n"
+                       "  gpload_average_timeused: %lu\n",
+                        psm->start_time.data(),
+                        status.data(),
+                        psd->ClientNum(),
+                        psd->Qps(),
+
+                        ps_server->gpload_failed_num,
+                        ps_server->latest_failed_time.data(),
+                        ps_server->failed_files_num,
+                        ps_server->failed_files_size,
+                        ps_server->gpload_longest_timeused,
+                        ps_server->gpload_latest_timeused,
+                        ps_server->gpload_average_timeused);
+
+ ss = inf;
+ DLOG(INFO) << ss <<std::endl;
+}
+
 pink::Status PSClientConn::AppendWelcome() {
   pink::PacketBuf* packet = self_thread_->welcome_msg();
 
@@ -61,4 +102,5 @@ bool PSClientConn::CheckPasswd(const std::string &passwd) {
 
 bool PSClientConn::Glog(const std::string &msg) {
   LOG(ERROR) << msg;
+  return true;
 }

@@ -88,6 +88,15 @@ Type "help" for help.
 
 test_db=# INSERT INTO test_table("name", "id") VALUES ('zhang', 1);
 INSERT 0 1
+
+test_db=# stall_status;
+NOTICE:
+  start_time: 20170920192532
+  service_status: ONLINE
+  conn_num: 1
+  QPS: 0
+  gpload_failed_num: 2
+  
 ```
 
 ## Limitation
