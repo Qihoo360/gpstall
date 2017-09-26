@@ -15,12 +15,24 @@ MonitorConn::MonitorConn(int fd, std::string &ip_port, pink::Thread *thread)
   res_ = dynamic_cast<google::protobuf::Message*>(&service_status_);
   ps_dispatch_thread_ = ps_monitor_thread_->ps_dispatch_thread;
   set_is_reply(false);
+  authorized_ = false;
 }
 
 int MonitorConn::DealMessage() {
   // Receive commmand
   command_.ParseFromArray(rbuf_ + COMMAND_HEADER_LENGTH, header_len_);
   std::string cmd = command_.command();
+  if(!authorized_){
+    if(!command_.has_user()||!command_.has_password()){
+      return -2;
+    }
+    if(command_.user() == ps_server->gp_user() && command_.password() == ps_server->passwd()){
+      authorized_ = true;
+    }
+    else {
+      return -2;
+    }
+  }
   if (cmd != "gpstall_info") {
     return -1;
   }
@@ -53,7 +65,8 @@ void MonitorConn::GetGploadStatus() {
   service_status_.set_gpload_failed_num(ps_server->gpload_failed_num);
   service_status_.set_lastest_failed_time(ps_server->latest_failed_time);
   service_status_.set_failed_files_num(ps_server->failed_files_num);
-  service_status_.set_failed_files_name(ps_server->failed_files_name);
+  // failed_fiels_name is not needed anymore in version 1.1
+  // service_status_.set_failed_files_name(ps_server->failed_files_name);
   service_status_.set_failed_files_size(ps_server->failed_files_size);
   service_status_.set_gpload_longest_timeused(ps_server->gpload_longest_timeused);
   service_status_.set_gpload_latest_timeused(ps_server->gpload_latest_timeused);

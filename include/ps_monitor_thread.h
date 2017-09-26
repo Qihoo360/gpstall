@@ -19,6 +19,7 @@ class MonitorConn : public pink::PbConn {
   virtual int DealMessage();
 
  private:
+  bool authorized_;
   gpstall::Command command_;
   gpstall::ServiceStatus service_status_;
 

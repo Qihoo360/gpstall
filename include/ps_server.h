@@ -33,7 +33,15 @@ class PSServer {
   explicit PSServer(const PSOptions& option);
   virtual ~PSServer();
   Status Start();
-  
+  PSMonitorThread* MonitorThread() const {
+    return ps_monitor_thread_;
+  }
+
+  PSDispatchThread* DispatchThread() const {
+    return ps_dispatch_thread_;
+  }
+
+
   struct CalcExecTime {
     uint64_t *ptimeused;
     struct timeval st, ed;
@@ -109,6 +117,8 @@ class PSServer {
   void MaybeFlushLog();
 
   void CollectGploadErrInfo(int ret);
+  static void SigChild(int sig);
+  int ExecuteScript(const std::string &script, const long timeout_ms);
 };
 
 #endif

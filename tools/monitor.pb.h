@@ -125,18 +125,48 @@ class Command : public ::google::protobuf::Message {
   inline ::std::string* release_command();
   inline void set_allocated_command(::std::string* command);
 
+  // optional string user = 2;
+  inline bool has_user() const;
+  inline void clear_user();
+  static const int kUserFieldNumber = 2;
+  inline const ::std::string& user() const;
+  inline void set_user(const ::std::string& value);
+  inline void set_user(const char* value);
+  inline void set_user(const char* value, size_t size);
+  inline ::std::string* mutable_user();
+  inline ::std::string* release_user();
+  inline void set_allocated_user(::std::string* user);
+
+  // optional string password = 3;
+  inline bool has_password() const;
+  inline void clear_password();
+  static const int kPasswordFieldNumber = 3;
+  inline const ::std::string& password() const;
+  inline void set_password(const ::std::string& value);
+  inline void set_password(const char* value);
+  inline void set_password(const char* value, size_t size);
+  inline ::std::string* mutable_password();
+  inline ::std::string* release_password();
+  inline void set_allocated_password(::std::string* password);
+
   // @@protoc_insertion_point(class_scope:gpstall.Command)
  private:
   inline void set_has_command();
   inline void clear_has_command();
+  inline void set_has_user();
+  inline void clear_has_user();
+  inline void set_has_password();
+  inline void clear_has_password();
 
   ::google::protobuf::UnknownFieldSet _unknown_fields_;
 
   ::std::string* command_;
   static ::std::string* _default_command_;
+  ::std::string* user_;
+  ::std::string* password_;
 
   mutable int _cached_size_;
-  ::google::protobuf::uint32 _has_bits_[(1 + 31) / 32];
+  ::google::protobuf::uint32 _has_bits_[(3 + 31) / 32];
 
   friend void  protobuf_AddDesc_monitor_2eproto();
   friend void protobuf_AssignDesc_monitor_2eproto();
@@ -285,7 +315,7 @@ class ServiceStatus : public ::google::protobuf::Message {
   inline ::google::protobuf::uint32 failed_files_num() const;
   inline void set_failed_files_num(::google::protobuf::uint32 value);
 
-  // required string failed_files_name = 8;
+  // optional string failed_files_name = 8;
   inline bool has_failed_files_name() const;
   inline void clear_failed_files_name();
   static const int kFailedFilesNameFieldNumber = 8;
@@ -451,6 +481,146 @@ inline void Command::set_allocated_command(::std::string* command) {
   } else {
     clear_has_command();
     command_ = const_cast< ::std::string*>(_default_command_);
+  }
+}
+
+// optional string user = 2;
+inline bool Command::has_user() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void Command::set_has_user() {
+  _has_bits_[0] |= 0x00000002u;
+}
+inline void Command::clear_has_user() {
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline void Command::clear_user() {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    user_->clear();
+  }
+  clear_has_user();
+}
+inline const ::std::string& Command::user() const {
+  return *user_;
+}
+inline void Command::set_user(const ::std::string& value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void Command::set_user(const char* value) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(value);
+}
+inline void Command::set_user(const char* value, size_t size) {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  user_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Command::mutable_user() {
+  set_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    user_ = new ::std::string;
+  }
+  return user_;
+}
+inline ::std::string* Command::release_user() {
+  clear_has_user();
+  if (user_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = user_;
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void Command::set_allocated_user(::std::string* user) {
+  if (user_ != &::google::protobuf::internal::kEmptyString) {
+    delete user_;
+  }
+  if (user) {
+    set_has_user();
+    user_ = user;
+  } else {
+    clear_has_user();
+    user_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+  }
+}
+
+// optional string password = 3;
+inline bool Command::has_password() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void Command::set_has_password() {
+  _has_bits_[0] |= 0x00000004u;
+}
+inline void Command::clear_has_password() {
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline void Command::clear_password() {
+  if (password_ != &::google::protobuf::internal::kEmptyString) {
+    password_->clear();
+  }
+  clear_has_password();
+}
+inline const ::std::string& Command::password() const {
+  return *password_;
+}
+inline void Command::set_password(const ::std::string& value) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(value);
+}
+inline void Command::set_password(const char* value) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(value);
+}
+inline void Command::set_password(const char* value, size_t size) {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  password_->assign(reinterpret_cast<const char*>(value), size);
+}
+inline ::std::string* Command::mutable_password() {
+  set_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    password_ = new ::std::string;
+  }
+  return password_;
+}
+inline ::std::string* Command::release_password() {
+  clear_has_password();
+  if (password_ == &::google::protobuf::internal::kEmptyString) {
+    return NULL;
+  } else {
+    ::std::string* temp = password_;
+    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
+    return temp;
+  }
+}
+inline void Command::set_allocated_password(::std::string* password) {
+  if (password_ != &::google::protobuf::internal::kEmptyString) {
+    delete password_;
+  }
+  if (password) {
+    set_has_password();
+    password_ = password;
+  } else {
+    clear_has_password();
+    password_ = const_cast< ::std::string*>(&::google::protobuf::internal::kEmptyString);
   }
 }
 
@@ -709,7 +879,7 @@ inline void ServiceStatus::set_failed_files_num(::google::protobuf::uint32 value
   failed_files_num_ = value;
 }
 
-// required string failed_files_name = 8;
+// optional string failed_files_name = 8;
 inline bool ServiceStatus::has_failed_files_name() const {
   return (_has_bits_[0] & 0x00000080u) != 0;
 }

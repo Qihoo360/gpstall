@@ -15,6 +15,7 @@ PSOptions::PSOptions()
     file_size(kFileSize),
     load_interval(kLoadCronInterval),
     flush_interval(kFlushCronInterval),
+    timeout(60*10*1000),
     data_path("./data/"),
     log_path("./log/"),
     minloglevel(0),
@@ -49,6 +50,7 @@ PSOptions::PSOptions(const PSOptions& options)
     file_size(options.file_size),
     load_interval(options.load_interval),
     flush_interval(options.flush_interval),
+    timeout(options.timeout),
     data_path(options.data_path),
     log_path(options.log_path),
     minloglevel(options.minloglevel),
@@ -94,6 +96,7 @@ void PSOptions::Dump() {
   LOG(INFO) << "    Options.file_size     : " << file_size << " Bytes";
   LOG(INFO) << "    Options.load_interval : " << load_interval << " Seconds";
   LOG(INFO) << "    Options.flush_interval: " << flush_interval << " Seconds";
+  LOG(INFO) << "    Options.timeout       : " << timeout << " Millisecond  seconds";
   LOG(INFO) << "    Options.load_script   : " << load_script;
   LOG(INFO) << "    Options.conf_script   : " << conf_script;
   LOG(INFO) << "    Options.daemon_mode   : " << daemon_mode;
@@ -120,6 +123,9 @@ int PSOptions::GetOptionFromFile(const std::string &configuration_file) {
   b.GetConfInt(LOAD_INTERVAL, &load_interval);
   b.GetConfInt(FLUSH_INTERVAL, &flush_interval);
   // TODO timeout
+  //b.GetConfInt(TIMEOUT, &timeout); not used but set a default value
+  timeout = 60 * 10 * 1000;
+  
   b.GetConfStr(DATA_PATH, &data_path);
   b.GetConfStr(LOG_PATH, &log_path);
   b.GetConfInt(MINLOGLEVEL, &minloglevel);
