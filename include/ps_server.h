@@ -117,8 +117,7 @@ class PSServer {
   void MaybeFlushLog();
 
   void CollectGploadErrInfo(int ret);
-  static void SigChild(int sig);
-  int ExecuteScript(const std::string &script, const long timeout_ms);
+  
 };
 
 #endif
